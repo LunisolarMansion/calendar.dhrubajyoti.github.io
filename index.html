@@ -247,7 +247,9 @@ $(document).ready(function () {
         calendarEvents: calendarEvents
     });
 
-/* ===== MONTH LIST POPULATOR (FIXED COLOUR LOGIC) ===== */
+    
+
+/* ===== MONTH LIST POPULATOR (COLOR-SYNCED WITH CALENDAR) ===== */
 function populateMonthlyEvents(selectedMonth) {
 
     const list = $('#event-list');
@@ -271,39 +273,14 @@ function populateMonthlyEvents(selectedMonth) {
             String(d.getMonth() + 1).padStart(2, '0') + '/' +
             d.getFullYear();
 
-        let cls = "";
+        /* 🔑 SINGLE SOURCE OF TRUTH */
+        const color = ev.color || "#ffffff";
 
-        /* ===== AUTHORITATIVE COLOUR CLASSIFICATION ===== */
-
-        // 🔵 Sundays / 2nd & 4th Saturdays
-        if (
-            ev.description.toLowerCase().includes("sunday") ||
-            ev.description.toLowerCase().includes("2nd saturday") ||
-            ev.description.toLowerCase().includes("4th saturday")
-        ) {
-            cls = "event-sunday";
-        }
-
-        // 🟡 Restricted Holidays
-        else if (ev.type === "Restricted Holiday" || ev.name === "Restricted Holiday") {
-            cls = "event-restricted";
-        }
-
-        // 🟢 Matri Pitri Vandana
-        else if (ev.description.toLowerCase().includes("matri pitri")) {
-            cls = "event-mpv";
-        }
-
-        // 🟠 All other Holidays
-        else if (ev.type === "Holiday") {
-            cls = "event-holiday";
-        }
-
-        list.append(
-            `<li class="${cls}">
+        list.append(`
+            <li style="color:${color}; font-weight:600;">
                 <strong>${dateText} -</strong> ${ev.description}
-            </li>`
-        );
+            </li>
+        `);
     });
 }
 

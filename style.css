@@ -91,3 +91,39 @@ body {
 .evo-calendar .event-indicator {
     opacity: 0.95;
 }
+
+/* ===== TWO COLUMN LAYOUT ===== */
+.monthly-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 20px;
+}
+
+.monthly-left h4,
+.monthly-right h4 {
+    color: #a7fc00;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.monthly-right {
+    border-left: 1px solid #1c4e80;
+    padding-left: 15px;
+}
+
+.monthly-right ul,
+.monthly-left ul {
+    list-style: none;
+}
+
+/* ===== IMPORTANT TASK STYLE ===== */
+.task-period {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.task-text {
+    color: #ff4c4c;
+    font-weight: 600;
+}
+

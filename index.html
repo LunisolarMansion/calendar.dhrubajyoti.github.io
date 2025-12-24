@@ -13,34 +13,31 @@
 <body>
 
 <div class="hero">
+
     <div id="calendar"></div>
 
     <div id="monthly-quote">
         <p id="quote-text"></p>
     </div>
-    
 
-<div id="monthly-events">
+    <div id="monthly-events">
+        <div class="monthly-grid">
 
-    <div class="monthly-grid">
+            <!-- LEFT : KEY DATES -->
+            <div class="monthly-left">
+                <h4>Month's Key Dates to Help You Plan the Month</h4>
+                <ul id="event-list"></ul>
+            </div>
 
-        <!-- LEFT : KEY DATES -->
-        <div class="monthly-left">
-            <h4>Month's Key Dates to Help You Plan the Month</h4>
-            <ul id="event-list"></ul>
+            <!-- RIGHT : IMPORTANT TASKS -->
+            <div class="monthly-right">
+                <h4>Important Tasks / Milestones</h4>
+                <ul id="task-list"></ul>
+            </div>
+
         </div>
-
-        <!-- RIGHT : IMPORTANT TASKS -->
-        <div class="monthly-right">
-            <h4>Important Tasks / Milestones</h4>
-            <ul id="task-list"></ul>
-        </div>
-
     </div>
 
-</div>
-
-    
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
@@ -49,7 +46,7 @@
 <script>
 $(document).ready(function () {
 
-    /* ===== EVENTS (UNCHANGED DATA STRUCTURE) ===== */
+    /* ===== EVENTS DATA ===== */
     const calendarEvents = [
 { id: 'event_00', name: "", date: "2026/01/01", description: "Happy New Year_ from Dhrubajyoti - Please Visit : <a href='https://lunisolarmansion.github.io/Login/' target='_blank' style='color: lime;'>dhrubajyoti's rural repository</a>", type: "holiday", everyYear: true },
 
@@ -243,6 +240,7 @@ $(document).ready(function () {
         // your full list continues here unchanged
     ];
 
+
     /* ===== MONTH QUOTES ===== */
     const monthQuotes = [
         "The beginning of the year is the perfect time to set your goals high and work tirelessly toward them.",
@@ -259,188 +257,133 @@ $(document).ready(function () {
         "Finish strong, together."
     ];
 
-    /* ===== NORMALISE EVENT COLOURS (SINGLE SOURCE OF TRUTH) ===== */
-calendarEvents.forEach(ev => {
+    /* ===== NORMALISE COLOURS FOR CALENDAR DOTS ===== */
+    calendarEvents.forEach(ev => {
+        const desc = (ev.description || "").toLowerCase();
 
-    const desc = ev.description.toLowerCase();
+        if (
+            desc.includes("sunday") ||
+            desc.includes("2nd saturday") ||
+            desc.includes("4th saturday")
+        ) {
+            ev.color = "#3fa9f5";               // Blue
+        }
+        else if (ev.type === "Restricted Holiday") {
+            ev.color = "#ffd700";               // Yellow
+        }
+        else if (desc.includes("matri pitri")) {
+            ev.color = "#32cd32";               // Green
+        }
+        else if (ev.type === "Holiday") {
+            ev.color = "#ff8c00";               // Orange
+        }
+    });
 
-    // 🔵 Sundays / 2nd & 4th Saturdays
-    if (
-        desc.includes("sunday") ||
-        desc.includes("2nd saturday") ||
-        desc.includes("4th saturday")
-    ) {
-        ev.color = "#3fa9f5"; // BLUE
-    }
-
-    // 🟡 Restricted Holidays
-    else if (ev.type === "Restricted Holiday") {
-        ev.color = "#ffd700"; // YELLOW
-    }
-
-    // 🟢 Matri Pitri Vandana
-    else if (desc.includes("matri pitri")) {
-        ev.color = "#32cd32"; // GREEN
-    }
-
-    // 🟠 All other Holidays
-    else if (ev.type === "Holiday") {
-        ev.color = "#ff8c00"; // ORANGE
-    }
-
-});
-
-    /* ===== REMOVE IMPORTANT TASKS FROM CALENDAR DOTS ===== */
-const calendarOnlyEvents = calendarEvents.filter(ev => ev.type !== "event");
-
+    /* ===== REMOVE TASK EVENTS FROM CALENDAR ===== */
+    const calendarOnlyEvents = calendarEvents.filter(ev => ev.type !== "event");
 
     /* ===== INIT CALENDAR ===== */
-$('#calendar').evoCalendar({
-    theme: 'midnight-blue',
-    calendarEvents: calendarOnlyEvents
-});
-
-
-    
-
-/* ===== MONTH LIST POPULATOR (SORTED + COLOR-SYNCED) ===== */
-function populateMonthlyEvents(selectedMonth) {
-
-    const list = $('#event-list');
-    list.empty();
-
-    /* 1️⃣ Filter events of selected month */
-    let filtered = calendarEvents.filter(ev => {
-        const d = new Date(ev.date);
-        return d.getMonth() === selectedMonth;
+    $('#calendar').evoCalendar({
+        theme: 'midnight-blue',
+        calendarEvents: calendarOnlyEvents
     });
 
-    if (filtered.length === 0) {
-        list.append('<li>No important dates this month.</li>');
-        return;
-    }
+    /* ===== LEFT PANEL : KEY DATES ===== */
+    function populateMonthlyEvents(month) {
 
-    /* 2️⃣ Sort by actual date (ascending) */
-    filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+        const list = $('#event-list');
+        list.empty();
 
-    /* 3️⃣ Render */
-    filtered.forEach(ev => {
+        const events = calendarEvents
+            .filter(ev => ev.type !== "event" && !Array.isArray(ev.date))
+            .filter(ev => new Date(ev.date).getMonth() === month)
+            .sort((a,b) => new Date(a.date) - new Date(b.date));
 
-        const d = new Date(ev.date);
-        const dateText =
-            String(d.getDate()).padStart(2, '0') + '/' +
-            String(d.getMonth() + 1).padStart(2, '0') + '/' +
-            d.getFullYear();
-
-        let textColor = "#ffffff"; // default white
-
-        /* ===== COLOUR RULES (AUTHORITATIVE) ===== */
-
-        // 🔵 Sundays / 2nd & 4th Saturdays
-        if (
-            ev.description.toLowerCase().includes("sunday") ||
-            ev.description.toLowerCase().includes("2nd saturday") ||
-            ev.description.toLowerCase().includes("4th saturday")
-        ) {
-            textColor = "#3fa9f5";
+        if (!events.length) {
+            list.append('<li>No important dates this month.</li>');
+            return;
         }
 
-        // 🟡 Restricted Holidays
-        else if (ev.type === "Restricted Holiday") {
-            textColor = "#ffd700";
-        }
+        events.forEach(ev => {
 
-        // 🟢 Matri Pitri Vandana
-        else if (ev.description.toLowerCase().includes("matri pitri")) {
-            textColor = "#32cd32";
-        }
+            const d = new Date(ev.date);
+            const dateText =
+                `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
 
-        // 🟠 All other Holidays
-        else if (ev.type === "Holiday") {
-            textColor = "#ff8c00";
-        }
+            let textColor = "#ff8c00"; // default holiday
 
-        /* 4️⃣ Date = WHITE, Text = category colour */
-        list.append(`
-            <li>
-                <span style="color:#ffffff; font-weight:600;">
-                    ${dateText} -
-                </span>
-                <span style="color:${textColor}; font-weight:600;">
-                    ${ev.description}
-                </span>
-            </li>
-        `);
-    });
-}
+            const desc = ev.description.toLowerCase();
 
-/* ===== IMPORTANT TASKS (RIGHT PANEL) ===== */
-function populateMonthlyTasks(selectedMonth) {
-
-    const list = $('#task-list');
-    list.empty();
-
-    const tasks = calendarEvents.filter(ev => ev.type === "event");
-
-    tasks.forEach(ev => {
-
-        let start, end;
-
-        if (Array.isArray(ev.date)) {
-            start = new Date(ev.date[0]);
-            end   = new Date(ev.date[1]);
-        } else {
-            start = end = new Date(ev.date);
-        }
-
-        // Show task if it overlaps selected month
-        if (
-            start.getMonth() === selectedMonth ||
-            end.getMonth() === selectedMonth
-        ) {
-
-            const period =
-                `${String(start.getDate()).padStart(2,'0')}/${start.getMonth()+1}/${start.getFullYear()}
-                 – 
-                 ${String(end.getDate()).padStart(2,'0')}/${end.getMonth()+1}/${end.getFullYear()}`;
+            if (
+                desc.includes("sunday") ||
+                desc.includes("2nd saturday") ||
+                desc.includes("4th saturday")
+            ) textColor = "#3fa9f5";
+            else if (ev.type === "Restricted Holiday") textColor = "#ffd700";
+            else if (desc.includes("matri pitri")) textColor = "#32cd32";
 
             list.append(`
                 <li>
-                    <span class="task-period">${period}</span><br>
-                    <span class="task-text">${ev.description}</span>
+                    <span class="date-white">${dateText} - </span>
+                    <span style="color:${textColor}; font-weight:600;">
+                        ${ev.description}
+                    </span>
                 </li>
             `);
-        }
-    });
-}
+        });
+    }
 
+    /* ===== RIGHT PANEL : IMPORTANT TASKS ===== */
+    function populateMonthlyTasks(month) {
+
+        const list = $('#task-list');
+        list.empty();
+
+        const tasks = calendarEvents.filter(ev => ev.type === "event");
+
+        tasks.forEach(ev => {
+
+            const start = new Date(ev.date[0]);
+            const end   = new Date(ev.date[1]);
+
+            if (start.getMonth() === month || end.getMonth() === month) {
+
+                const period =
+                    `${String(start.getDate()).padStart(2,'0')}/${start.getMonth()+1}/${start.getFullYear()} – ` +
+                    `${String(end.getDate()).padStart(2,'0')}/${end.getMonth()+1}/${end.getFullYear()}`;
+
+                list.append(`
+                    <li>
+                        <span class="task-period">${period}</span><br>
+                        <span class="task-text">${ev.description}</span>
+                    </li>
+                `);
+            }
+        });
+    }
 
     /* ===== QUOTE HANDLER ===== */
     function setQuote(month) {
         $('#quote-text').text(monthQuotes[month]);
     }
 
-    const todayMonth = new Date().getMonth();
+    const currentMonth = new Date().getMonth();
+    populateMonthlyEvents(currentMonth);
+    populateMonthlyTasks(currentMonth);
+    setQuote(currentMonth);
 
+    $('#calendar').on('selectMonth', (e,m) => {
+        populateMonthlyEvents(m);
+        populateMonthlyTasks(m);
+        setQuote(m);
+    });
 
-    populateMonthlyEvents(todayMonth);
-populateMonthlyTasks(todayMonth);
-setQuote(todayMonth);
-
-$('#calendar').on('selectMonth', function (e, m) {
-    populateMonthlyEvents(m);
-    populateMonthlyTasks(m);
-    setQuote(m);
-});
-
-$('#calendar').on('selectDate', function (e, d) {
-    const m = new Date(d).getMonth();
-    populateMonthlyEvents(m);
-    populateMonthlyTasks(m);
-    setQuote(m);
-});
-
-    
+    $('#calendar').on('selectDate', (e,d) => {
+        const m = new Date(d).getMonth();
+        populateMonthlyEvents(m);
+        populateMonthlyTasks(m);
+        setQuote(m);
+    });
 
 });
 </script>

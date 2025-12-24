@@ -18,11 +18,29 @@
     <div id="monthly-quote">
         <p id="quote-text"></p>
     </div>
+    
 
-    <div id="monthly-events">
-        <h4 style="color:#a7fc00;">Month's Key Dates to Help You Plan the Month</h4>
-        <ul id="event-list"></ul>
+<div id="monthly-events">
+
+    <div class="monthly-grid">
+
+        <!-- LEFT : KEY DATES -->
+        <div class="monthly-left">
+            <h4>Month's Key Dates to Help You Plan the Month</h4>
+            <ul id="event-list"></ul>
+        </div>
+
+        <!-- RIGHT : IMPORTANT TASKS -->
+        <div class="monthly-right">
+            <h4>Important Tasks / Milestones</h4>
+            <ul id="task-list"></ul>
+        </div>
+
     </div>
+
+</div>
+
+    
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
@@ -272,12 +290,16 @@ calendarEvents.forEach(ev => {
 
 });
 
+    /* ===== REMOVE IMPORTANT TASKS FROM CALENDAR DOTS ===== */
+const calendarOnlyEvents = calendarEvents.filter(ev => ev.type !== "event");
+
 
     /* ===== INIT CALENDAR ===== */
-    $('#calendar').evoCalendar({
-        theme: 'midnight-blue',
-        calendarEvents: calendarEvents
-    });
+$('#calendar').evoCalendar({
+    theme: 'midnight-blue',
+    calendarEvents: calendarOnlyEvents
+});
+
 
     
 
@@ -352,6 +374,45 @@ function populateMonthlyEvents(selectedMonth) {
     });
 }
 
+/* ===== IMPORTANT TASKS (RIGHT PANEL) ===== */
+function populateMonthlyTasks(selectedMonth) {
+
+    const list = $('#task-list');
+    list.empty();
+
+    const tasks = calendarEvents.filter(ev => ev.type === "event");
+
+    tasks.forEach(ev => {
+
+        let start, end;
+
+        if (Array.isArray(ev.date)) {
+            start = new Date(ev.date[0]);
+            end   = new Date(ev.date[1]);
+        } else {
+            start = end = new Date(ev.date);
+        }
+
+        // Show task if it overlaps selected month
+        if (
+            start.getMonth() === selectedMonth ||
+            end.getMonth() === selectedMonth
+        ) {
+
+            const period =
+                `${String(start.getDate()).padStart(2,'0')}/${start.getMonth()+1}/${start.getFullYear()}
+                 – 
+                 ${String(end.getDate()).padStart(2,'0')}/${end.getMonth()+1}/${end.getFullYear()}`;
+
+            list.append(`
+                <li>
+                    <span class="task-period">${period}</span><br>
+                    <span class="task-text">${ev.description}</span>
+                </li>
+            `);
+        }
+    });
+}
 
 
     /* ===== QUOTE HANDLER ===== */
@@ -360,19 +421,26 @@ function populateMonthlyEvents(selectedMonth) {
     }
 
     const todayMonth = new Date().getMonth();
+
+
     populateMonthlyEvents(todayMonth);
-    setQuote(todayMonth);
+populateMonthlyTasks(todayMonth);
+setQuote(todayMonth);
 
-    $('#calendar').on('selectMonth', function (e, m) {
-        populateMonthlyEvents(m);
-        setQuote(m);
-    });
+$('#calendar').on('selectMonth', function (e, m) {
+    populateMonthlyEvents(m);
+    populateMonthlyTasks(m);
+    setQuote(m);
+});
 
-    $('#calendar').on('selectDate', function (e, d) {
-        const m = new Date(d).getMonth();
-        populateMonthlyEvents(m);
-        setQuote(m);
-    });
+$('#calendar').on('selectDate', function (e, d) {
+    const m = new Date(d).getMonth();
+    populateMonthlyEvents(m);
+    populateMonthlyTasks(m);
+    setQuote(m);
+});
+
+    
 
 });
 </script>

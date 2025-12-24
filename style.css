@@ -1,98 +1,44 @@
-/* ===== GLOBAL RESET ===== */
+/* ===== GLOBAL ===== */
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
-    font-family: "Poppins", "Segoe UI", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 body {
     background: #000;
 }
 
-/* ===== HERO ===== */
-.hero {
+/* ===== MOBILE MONTH SELECTOR ===== */
+.mobile-month-selector {
+    display: none;
+    margin-bottom: 15px;
+}
+
+.mobile-month-selector select {
     width: 100%;
-    min-height: 100vh;
-    padding: 20px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 15px;
 }
 
-/* ===== CALENDAR ===== */
-#calendar {
-    margin-bottom: 25px;
-}
-
-/* ===== MONTHLY QUOTE ===== */
-#monthly-quote {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    background: #081a2c;
-    border: 1px solid #1c4e80;
-    text-align: center;
-}
-
-#monthly-quote p {
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-/* ===== MONTHLY CARD ===== */
-#monthly-events {
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 10px;
-    background: #0f2437;
-    border: 1px solid #2c6faa;
-}
-
-/* ===== TWO COLUMN GRID ===== */
+/* ===== MONTHLY GRID ===== */
 .monthly-grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     gap: 30px;
 }
 
-/* LEFT / RIGHT SECTIONS */
-.monthly-left,
-.monthly-right {
-    padding: 10px;
+/* ===== COLLAPSIBLE ===== */
+.collapsible-header {
+    cursor: pointer;
+    user-select: none;
 }
 
-.monthly-right {
-    border-left: 2px solid rgba(255,255,255,0.15);
+.collapsible-body {
+    margin-top: 10px;
 }
 
-/* HEADINGS */
-.monthly-left h4,
-.monthly-right h4 {
-    color: #a7fc00;
-    text-align: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-    padding-bottom: 6px;
-}
-
-/* LISTS */
-#event-list,
-#task-list {
-    list-style: none;
-}
-
-#event-list li,
-#task-list li {
-    margin-bottom: 12px;
-    line-height: 1.6;
-}
-
-/* DATE WHITE */
-.date-white {
-    color: #ffffff;
-    font-weight: 600;
-}
-
-/* TASK STYLES */
+/* ===== TASK STYLES ===== */
 .task-period {
     color: #ffffff;
     font-weight: 600;
@@ -103,45 +49,27 @@ body {
     font-weight: 600;
 }
 
-/* DOT VISIBILITY */
-.evo-calendar .event-indicator {
-    opacity: 0.95;
-}
-
-/* ===== MOBILE RESPONSIVE FIX ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
 
-    /* Stack sections vertically */
     .monthly-grid {
         grid-template-columns: 1fr;
-        gap: 20px;
     }
 
-    /* IMPORTANT TASKS FIRST */
     .monthly-right {
-        order: 1;
-        border-left: none;
-        border-bottom: 2px solid rgba(255,255,255,0.15);
-        padding-bottom: 15px;
-        margin-bottom: 10px;
-    }
-
-    /* KEY DATES SECOND */
-    .monthly-left {
-        order: 2;
+        position: sticky;
+        top: 0;
+        background: #0f2437;
+        z-index: 20;
         padding-top: 10px;
+        border-bottom: 2px solid rgba(255,255,255,0.2);
     }
 
-    /* Headings spacing for mobile */
-    .monthly-left h4,
-    .monthly-right h4 {
-        font-size: 16px;
+    .collapsible-body {
+        display: none;
     }
 
-    /* Slightly tighter text for mobile */
-    #event-list li,
-    #task-list li {
-        font-size: 14px;
+    .mobile-month-selector {
+        display: block;
     }
 }
-

@@ -1,75 +1,52 @@
-/* ===== GLOBAL ===== */
-* {
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+*{box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:#000;margin:0}
+
+/* HERO */
+.hero{padding:20px}
+.content-flow{display:flex;flex-direction:column;gap:20px}
+
+/* MONTH SELECTOR */
+.mobile-month-selector{display:none}
+.mobile-month-selector select{
+  width:100%;padding:10px;border-radius:6px;font-size:15px
 }
 
-body {
-    background: #000;
+/* QUOTE */
+#monthly-quote{
+  background:#081a2c;border:1px solid #1c4e80;
+  border-radius:10px;padding:18px;text-align:center
+}
+#monthly-quote p{color:#fff;font-size:17px;font-weight:600}
+
+/* GRID */
+.monthly-grid{
+  display:grid;grid-template-columns:1.2fr 1fr;gap:30px
 }
 
-/* ===== MOBILE MONTH SELECTOR ===== */
-.mobile-month-selector {
-    display: none;
-    margin-bottom: 15px;
+/* COLLAPSIBLE */
+.collapsible-header{cursor:pointer}
+.collapsible-header::after{content:" ▼";font-size:12px;opacity:.7}
+.collapsible.collapsed .collapsible-header::after{content:" ▶"}
+
+/* TASKS */
+.task-period{color:#fff;font-weight:600}
+.task-text{color:#ff4c4c;font-weight:600}
+.task-chip{
+  background:#fff;color:#000;padding:2px 8px;
+  border-radius:12px;font-size:12px;font-weight:700;margin-left:8px
 }
-
-.mobile-month-selector select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    font-size: 15px;
+.task-countdown{
+  font-size:12px;font-weight:700;margin-left:8px;color:#ffcc00
 }
+.task-countdown.overdue{color:#ff4444}
 
-/* ===== MONTHLY GRID ===== */
-.monthly-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 30px;
-}
-
-/* ===== COLLAPSIBLE ===== */
-.collapsible-header {
-    cursor: pointer;
-    user-select: none;
-}
-
-.collapsible-body {
-    margin-top: 10px;
-}
-
-/* ===== TASK STYLES ===== */
-.task-period {
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.task-text {
-    color: #ff4c4c;
-    font-weight: 600;
-}
-
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
-
-    .monthly-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .monthly-right {
-        position: sticky;
-        top: 0;
-        background: #0f2437;
-        z-index: 20;
-        padding-top: 10px;
-        border-bottom: 2px solid rgba(255,255,255,0.2);
-    }
-
-    .collapsible-body {
-        display: none;
-    }
-
-    .mobile-month-selector {
-        display: block;
-    }
+/* MOBILE */
+@media(max-width:768px){
+  .monthly-grid{grid-template-columns:1fr}
+  .monthly-right{
+    position:sticky;top:0;background:#0f2437;
+    z-index:20;padding-top:10px;border-bottom:2px solid rgba(255,255,255,.2)
+  }
+  .collapsible-body{display:none}
+  .mobile-month-selector{display:block}
 }

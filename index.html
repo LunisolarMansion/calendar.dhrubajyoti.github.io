@@ -1,92 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activity Calendar with Monthly Summary and Quotes</title>
-    <link rel="stylesheet" href="evo-calendar.min.css">
-    <link rel="stylesheet" href="evo-calendar.midnight-blue.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .calendar-container {
-            width: 100%;
-            display: block;
-        }
-        #calendar {
-            margin-bottom: 20px;
-        }
-        #monthly-events {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #0074A2; /* Same color as calendar's theme */
-            border-radius: 8px;
-            background-color: #1c2b3b; /* Midnight blue background */
-            color: white; /* White text for better contrast */
-        }
-        #monthly-events h3 {
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-        #monthly-events ul {
-            list-style: none;
-            padding: 0;
-        }
-        #monthly-events li {
-            margin-bottom: 8px;
-        }
-        #monthly-events li strong {
-            color: #ffcc00; /* Highlighted color for the date */
-        }
-        #monthly-quote {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #0074A2;
-            border-radius: 8px;
-            background-color: #1c2b3b;
-            color: white;
-            font-style: italic;
-            text-align: center;
-        }
-   #monthly-quote p {
-            color: #ffff00; /* Fluorescent Green for the quote text */
-            font-size: 16px;
-            font-weight: bold;
-        }
-   #monthly-events p {
-            color: #54ff9f; /* Fluorescent Green for the quote text */
-            font-size: 16px;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Activity Calendar 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="evo-calendar.min.css">
+<link rel="stylesheet" href="evo-calendar.midnight-blue.min.css">
+<link rel="stylesheet" href="style.css">
+
 </head>
 <body>
-    <div class="calendar-container">
-        <div id="calendar"></div>
-        <div id="monthly-quote">
-            <h3></h3>
-            <p id="quote-text">Loading quote...</p>
-        </div>
-        <div id="monthly-events">
-            <h4><p class="underlined-text" style="color: #a7fc00;">Month's Key Dates to Help You Plan the Month</p></h4>
 
+<div class="hero">
+    <div id="calendar"></div>
 
-
-
-            <ul id="event-list">
-                <!-- Monthly events will be populated here -->
-            </ul>
-        </div>
+    <div id="monthly-quote">
+        <p id="quote-text"></p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-    <script src="evo-calendar.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Event data
-            const calendarEvents = [
+    <div id="monthly-events">
+        <h4 style="color:#a7fc00;">Month's Key Dates to Help You Plan the Month</h4>
+        <ul id="event-list"></ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script src="evo-calendar.min.js"></script>
+
+<script>
+$(document).ready(function () {
+
+    /* ===== EVENTS (UNCHANGED DATA STRUCTURE) ===== */
+    const calendarEvents = [
 { id: 'event_00', name: "", date: "2026/01/01", description: "Happy New Year_ from Dhrubajyoti - Please Visit : <a href='https://lunisolarmansion.github.io/Login/' target='_blank' style='color: lime;'>dhrubajyoti's rural repository</a>", type: "holiday", everyYear: true },
 
 { id: 'event_01', name: "Restricted Holiday", date: "2026/01/01", description: "New Year's Day", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
@@ -268,82 +214,92 @@
 
 
 
+{ id: 'event200', name: "*", badge: "PMAY-G", date: ["2026/01/09", "2026/01/09"], description: "Central function of the Griha Pravesh Ceremony of 50,000 PMAY-G houses", type: "event", color: "#FFFFFF" },
+{ id: 'event201', name: "*", badge: "Mahatma Gandhi NREGA", date: ["2026/01/01", "2026/01/20"], description: "Presentation of Block Plans by Programme Officer before DPC by 20th January' 2026", type: "event", color: "#FFFFFF" },
+{ id: 'event202', name: "*", badge: "Mahatma Gandhi NREGA", date: ["2026/01/21", "2026/01/21"], description: "Presentation of District Annual Plan and LB to Zilla Parishad by the DPC by 21st January' 2026", type: "event", color: "#FFFFFF" },
+{ id: 'event203', name: "*", badge: "Mahatma Gandhi NREGA", date: ["2026/01/22", "2026/01/31"], description: "Approval of District Annual Plan by the Zilla Parishad and submission of the same to the State by 31st January' 2026", type: "event", color: "#FFFFFF" },
+{ id: 'event204', name: "*", badge: "Mahatma Gandhi NREGA", date: ["2026/02/01", "2026/02/10"], description: "Submission of Labour Budget to the Central Government by 10th February' 2026", type: "event", color: "#FFFFFF" }, 
+{ id: 'event205', name: "*", badge: "To start participatory planning exercise", date: ["2026/08/15", "2026/08/16"], description: "As per Para 7, Schedule (1) of the Mahatma Gandhi NREG Act", type: "event", color: "#FFFFFF" },
 
 
+        // your full list continues here unchanged
+    ];
 
+    /* ===== MONTH QUOTES ===== */
+    const monthQuotes = [
+        "The beginning of the year is the perfect time to set your goals high and work tirelessly toward them.",
+        "A workplace isn't just a space to work; it's a space to grow.",
+        "Teamwork transforms effort into excellence.",
+        "Collaboration unlocks creative potential.",
+        "Consistency is the bridge between goals and achievement.",
+        "A positive workplace is the foundation of success.",
+        "Teamwork fuels extraordinary outcomes.",
+        "Great achievements are built together.",
+        "Hard work turns dreams into reality.",
+        "Every challenge is an opportunity to grow.",
+        "Motivation multiplies when shared.",
+        "Finish strong, together."
+    ];
 
+    /* ===== INIT CALENDAR ===== */
+    $('#calendar').evoCalendar({
+        theme: 'midnight-blue',
+        calendarEvents: calendarEvents
+    });
 
-            ];
+    /* ===== MONTH LIST POPULATOR ===== */
+    function populateMonthlyEvents(month) {
+        const list = $('#event-list');
+        list.empty();
 
-            // Month-wise quotes
-            const monthQuotes = [
-"The beginning of the year is the perfect time to set your goals high and work tirelessly toward them",
-"A workplace isn't just a space to work; it's a space to grow, to innovate, and to learn",
-"Teamwork is the art of blending individual strengths into a collective force that drives greater success",
-"Collaboration is the key to unlocking creative potential",
-"In work, consistency is the bridge between goals and accomplishment",
-"A positive workplace is a foundation for success",
-"Teamwork is the fuel that allows common people to attain uncommon results",
-"Great things in business are never done by one person",
-"Hard work and perseverance turn dreams into reality",
-"In a productive workplace, every challenge is seen as an opportunity for growth",
-"Teamwork is not just about working together; it’s about challenging each other, motivating each other, and pushing each other to achieve greatness",
-"As the year draws to a close, remember: collaboration is the secret ingredient to turning big ideas into even bigger achievements"
-            ];
-
-            // Initialize calendar
-            $('#calendar').evoCalendar({
-                theme: "midnight-blue",
-                calendarEvents: calendarEvents
-            });
-
-            // Function to populate events of the current month
-            function populateMonthlyEvents(selectedMonth) {
-                const eventsForMonth = calendarEvents.filter(event => {
-                    const eventDate = new Date(event.date);
-                    return eventDate.getMonth() === selectedMonth;
-                });
-
-                const eventList = $('#event-list');
-                eventList.empty();
-
-                if (eventsForMonth.length > 0) {
-                    eventsForMonth.forEach(event => {
-                        // Format the date to DD/MM/YYYY
-                        const eventDate = new Date(event.date);
-                        const formattedDate = `${String(eventDate.getDate()).padStart(2, '0')}/${String(eventDate.getMonth() + 1).padStart(2, '0')}/${eventDate.getFullYear()}`;
-
-                        eventList.append(`<li><strong>${formattedDate} -</strong> ${event.description}</li>`);
-                    });
-                } else {
-                    eventList.append('<li>No important dates this month.</li>');
-                }
-            }
-
-            // Function to set the monthly quote
-            function setMonthlyQuote(monthIndex) {
-                const quoteText = monthQuotes[monthIndex];
-                $('#quote-text').text(quoteText);
-            }
-
-            // Initialize with the current month
-            const currentMonth = new Date().getMonth();
-            populateMonthlyEvents(currentMonth);
-            setMonthlyQuote(currentMonth);
-
-            // Listen for month changes and update the important dates and quote
-            $('#calendar').on('selectMonth', function(event, newMonth) {
-                populateMonthlyEvents(newMonth);
-                setMonthlyQuote(newMonth);
-            });
-
-            // Listen for day selection and update important dates accordingly
-            $('#calendar').on('selectDate', function(event, newDate) {
-                const selectedMonth = new Date(newDate).getMonth();
-                populateMonthlyEvents(selectedMonth);
-                setMonthlyQuote(selectedMonth);
-            });
+        const filtered = calendarEvents.filter(ev => {
+            return new Date(ev.date).getMonth() === month;
         });
-    </script>
+
+        if (filtered.length === 0) {
+            list.append('<li>No important dates this month.</li>');
+            return;
+        }
+
+        filtered.forEach(ev => {
+            const d = new Date(ev.date);
+            const dateText =
+                String(d.getDate()).padStart(2,'0') + '/' +
+                String(d.getMonth()+1).padStart(2,'0') + '/' +
+                d.getFullYear();
+
+            let cls = '';
+            if (ev.type === 'Sunday') cls = 'event-sunday';
+            else if (ev.type === 'Restricted') cls = 'event-restricted';
+            else if (ev.type === 'Holiday') cls = 'event-holiday';
+            else if (ev.type === 'MPV') cls = 'event-mpv';
+
+            list.append(`<li class="${cls}"><strong>${dateText} -</strong> ${ev.description}</li>`);
+        });
+    }
+
+    /* ===== QUOTE HANDLER ===== */
+    function setQuote(month) {
+        $('#quote-text').text(monthQuotes[month]);
+    }
+
+    const todayMonth = new Date().getMonth();
+    populateMonthlyEvents(todayMonth);
+    setQuote(todayMonth);
+
+    $('#calendar').on('selectMonth', function (e, m) {
+        populateMonthlyEvents(m);
+        setQuote(m);
+    });
+
+    $('#calendar').on('selectDate', function (e, d) {
+        const m = new Date(d).getMonth();
+        populateMonthlyEvents(m);
+        setQuote(m);
+    });
+
+});
+</script>
+
 </body>
 </html>

@@ -249,13 +249,14 @@ $(document).ready(function () {
 
     
 
-/* ===== MONTH LIST POPULATOR (COLOR-SYNCED WITH CALENDAR) ===== */
+/* ===== MONTH LIST POPULATOR (SORTED + COLOR-SYNCED) ===== */
 function populateMonthlyEvents(selectedMonth) {
 
     const list = $('#event-list');
     list.empty();
 
-    const filtered = calendarEvents.filter(ev => {
+    /* 1️⃣ Filter events of selected month */
+    let filtered = calendarEvents.filter(ev => {
         const d = new Date(ev.date);
         return d.getMonth() === selectedMonth;
     });
@@ -265,6 +266,10 @@ function populateMonthlyEvents(selectedMonth) {
         return;
     }
 
+    /* 2️⃣ Sort by actual date (ascending) */
+    filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    /* 3️⃣ Render */
     filtered.forEach(ev => {
 
         const d = new Date(ev.date);
@@ -273,16 +278,48 @@ function populateMonthlyEvents(selectedMonth) {
             String(d.getMonth() + 1).padStart(2, '0') + '/' +
             d.getFullYear();
 
-        /* 🔑 SINGLE SOURCE OF TRUTH */
-        const color = ev.color || "#ffffff";
+        let textColor = "#ffffff"; // default white
 
+        /* ===== COLOUR RULES (AUTHORITATIVE) ===== */
+
+        // 🔵 Sundays / 2nd & 4th Saturdays
+        if (
+            ev.description.toLowerCase().includes("sunday") ||
+            ev.description.toLowerCase().includes("2nd saturday") ||
+            ev.description.toLowerCase().includes("4th saturday")
+        ) {
+            textColor = "#3fa9f5";
+        }
+
+        // 🟡 Restricted Holidays
+        else if (ev.type === "Restricted Holiday") {
+            textColor = "#ffd700";
+        }
+
+        // 🟢 Matri Pitri Vandana
+        else if (ev.description.toLowerCase().includes("matri pitri")) {
+            textColor = "#32cd32";
+        }
+
+        // 🟠 All other Holidays
+        else if (ev.type === "Holiday") {
+            textColor = "#ff8c00";
+        }
+
+        /* 4️⃣ Date = WHITE, Text = category colour */
         list.append(`
-            <li style="color:${color}; font-weight:600;">
-                <strong>${dateText} -</strong> ${ev.description}
+            <li>
+                <span style="color:#ffffff; font-weight:600;">
+                    ${dateText} -
+                </span>
+                <span style="color:${textColor}; font-weight:600;">
+                    ${ev.description}
+                </span>
             </li>
         `);
     });
 }
+
 
 
     /* ===== QUOTE HANDLER ===== */

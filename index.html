@@ -241,6 +241,38 @@ $(document).ready(function () {
         "Finish strong, together."
     ];
 
+    /* ===== NORMALISE EVENT COLOURS (SINGLE SOURCE OF TRUTH) ===== */
+calendarEvents.forEach(ev => {
+
+    const desc = ev.description.toLowerCase();
+
+    // 🔵 Sundays / 2nd & 4th Saturdays
+    if (
+        desc.includes("sunday") ||
+        desc.includes("2nd saturday") ||
+        desc.includes("4th saturday")
+    ) {
+        ev.color = "#3fa9f5"; // BLUE
+    }
+
+    // 🟡 Restricted Holidays
+    else if (ev.type === "Restricted Holiday") {
+        ev.color = "#ffd700"; // YELLOW
+    }
+
+    // 🟢 Matri Pitri Vandana
+    else if (desc.includes("matri pitri")) {
+        ev.color = "#32cd32"; // GREEN
+    }
+
+    // 🟠 All other Holidays
+    else if (ev.type === "Holiday") {
+        ev.color = "#ff8c00"; // ORANGE
+    }
+
+});
+
+
     /* ===== INIT CALENDAR ===== */
     $('#calendar').evoCalendar({
         theme: 'midnight-blue',

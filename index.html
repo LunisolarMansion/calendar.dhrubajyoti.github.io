@@ -247,36 +247,66 @@ $(document).ready(function () {
         calendarEvents: calendarEvents
     });
 
-    /* ===== MONTH LIST POPULATOR ===== */
-    function populateMonthlyEvents(month) {
-        const list = $('#event-list');
-        list.empty();
+/* ===== MONTH LIST POPULATOR (FIXED COLOUR LOGIC) ===== */
+function populateMonthlyEvents(selectedMonth) {
 
-        const filtered = calendarEvents.filter(ev => {
-            return new Date(ev.date).getMonth() === month;
-        });
+    const list = $('#event-list');
+    list.empty();
 
-        if (filtered.length === 0) {
-            list.append('<li>No important dates this month.</li>');
-            return;
+    const filtered = calendarEvents.filter(ev => {
+        const d = new Date(ev.date);
+        return d.getMonth() === selectedMonth;
+    });
+
+    if (filtered.length === 0) {
+        list.append('<li>No important dates this month.</li>');
+        return;
+    }
+
+    filtered.forEach(ev => {
+
+        const d = new Date(ev.date);
+        const dateText =
+            String(d.getDate()).padStart(2, '0') + '/' +
+            String(d.getMonth() + 1).padStart(2, '0') + '/' +
+            d.getFullYear();
+
+        let cls = "";
+
+        /* ===== AUTHORITATIVE COLOUR CLASSIFICATION ===== */
+
+        // 🔵 Sundays / 2nd & 4th Saturdays
+        if (
+            ev.description.toLowerCase().includes("sunday") ||
+            ev.description.toLowerCase().includes("2nd saturday") ||
+            ev.description.toLowerCase().includes("4th saturday")
+        ) {
+            cls = "event-sunday";
         }
 
-        filtered.forEach(ev => {
-            const d = new Date(ev.date);
-            const dateText =
-                String(d.getDate()).padStart(2,'0') + '/' +
-                String(d.getMonth()+1).padStart(2,'0') + '/' +
-                d.getFullYear();
+        // 🟡 Restricted Holidays
+        else if (ev.type === "Restricted Holiday" || ev.name === "Restricted Holiday") {
+            cls = "event-restricted";
+        }
 
-            let cls = '';
-            if (ev.type === 'Sunday') cls = 'event-sunday';
-            else if (ev.type === 'Restricted') cls = 'event-restricted';
-            else if (ev.type === 'Holiday') cls = 'event-holiday';
-            else if (ev.type === 'MPV') cls = 'event-mpv';
+        // 🟢 Matri Pitri Vandana
+        else if (ev.description.toLowerCase().includes("matri pitri")) {
+            cls = "event-mpv";
+        }
 
-            list.append(`<li class="${cls}"><strong>${dateText} -</strong> ${ev.description}</li>`);
-        });
-    }
+        // 🟠 All other Holidays
+        else if (ev.type === "Holiday") {
+            cls = "event-holiday";
+        }
+
+        list.append(
+            `<li class="${cls}">
+                <strong>${dateText} -</strong> ${ev.description}
+            </li>`
+        );
+    });
+}
+
 
     /* ===== QUOTE HANDLER ===== */
     function setQuote(month) {

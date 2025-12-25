@@ -17,25 +17,26 @@ body {
 
 .section-title {
     text-align: center;
-    color: #bfff00 /* Lime */
+    color: #bfff00; /* Lime */
     font-weight: 500;
     letter-spacing: 0.5px;
 
     text-shadow:
-        0 0 6px rgba(255, 105, 180, 0.35),
-        0 0 14px rgba(255, 105, 180, 0.18);
+        0 0 6px rgba(191, 255, 0, 0.35),
+        0 0 14px rgba(191, 255, 0, 0.18);
 }
 
 ul {
-    list-style:none;
-    padding:0;
+    list-style: none;
+    padding: 0;
 }
 
 li {
-    font-size:14px;
-    line-height:1.6;
-    margin-bottom:8px;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 8px;
 }
+
 
 /* ================= TASK STYLES ================= */
 

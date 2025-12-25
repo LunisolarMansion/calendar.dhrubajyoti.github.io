@@ -4,6 +4,8 @@ body {
     color:#ccc;
 }
 
+/* ================= MONTHLY GRID ================= */
+
 .monthly-grid {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -24,8 +26,6 @@ body {
         0 0 14px rgba(255, 105, 180, 0.18);
 }
 
-
-
 ul {
     list-style:none;
     padding:0;
@@ -36,6 +36,8 @@ li {
     line-height:1.6;
     margin-bottom:8px;
 }
+
+/* ================= TASK STYLES ================= */
 
 .task-text {
     color:#e774ff;
@@ -74,9 +76,16 @@ li {
         0 0 12px rgba(50, 205, 50, 0.15);
 }
 
-/* ================= MOBILE TYPOGRAPHY ================= */
+/* ================= MOBILE TYPOGRAPHY & LAYOUT ================= */
 
 @media (max-width: 768px) {
+
+    /* STACK SECTIONS VERTICALLY */
+    .monthly-grid {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        padding: 20px;
+    }
 
     /* Quote */
     #quote-text {
@@ -91,13 +100,10 @@ li {
         margin-bottom: 10px;
     }
 
-    /* Important Tasks & Month Key Dates text */
-    .tasks-list li,
-    .key-dates-list li {
+    /* Task & key date text */
+    li {
         font-size: 13.5px;
         line-height: 1.5;
         letter-spacing: 0.2px;
     }
 }
-
-

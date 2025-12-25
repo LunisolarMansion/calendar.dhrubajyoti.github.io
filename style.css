@@ -41,7 +41,7 @@ li {
 /* ================= TASK STYLES ================= */
 
 .task-text {
-    color:#ffd700;
+    color:#f3b1ff;
 }
 
 .task-date {
@@ -67,7 +67,7 @@ li {
 /* ================= QUOTE – NEON GLOW ================= */
 
 #quote-text {
-    color: #00adb5; /* Midnight Blue */
+    color: #1CFFEB; /* Neon Aqua */
     text-align: center;
     font-weight: 500;
     letter-spacing: 0.4px;

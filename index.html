@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Activity Calendar 2026</title>
+<title>Activity Calendar</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="evo-calendar.min.css">
@@ -13,81 +13,54 @@
 <body>
 
 <div class="hero">
+    <div class="content-flow">
 
-  <!-- CALENDAR -->
-  <div id="calendar"></div>
+        <!-- CALENDAR -->
+        <div id="calendar"></div>
 
-  <!-- QUOTE -->
-  <div id="monthly-quote">
-    <p id="quote-text"></p>
-  </div>
-
-  <!-- PANELS -->
-  <div id="monthly-events">
-    <div class="monthly-grid">
-
-      <!-- IMPORTANT TASKS -->
-      <div class="monthly-right collapsible">
-        <h4 class="collapsible-header sticky-header">
-          Important Tasks / Milestones
-        </h4>
-        <div class="collapsible-body">
-          <ul id="task-list"></ul>
+        <!-- QUOTE -->
+        <div id="monthly-quote">
+            <p id="quote-text"></p>
         </div>
-      </div>
 
-      <!-- KEY DATES -->
-      <div class="monthly-left collapsible">
-        <h4 class="collapsible-header">
-          Month's Key Dates to Help You Plan the Month
-        </h4>
-        <div class="collapsible-body">
-          <ul id="event-list"></ul>
+        <!-- MONTHLY PANELS -->
+        <div id="monthly-events">
+            <div class="monthly-grid">
+
+                <!-- TASKS -->
+                <div class="monthly-right collapsible">
+                    <h4 class="collapsible-header">Important Tasks / Milestones</h4>
+                    <div class="collapsible-body">
+                        <ul id="task-list"></ul>
+                    </div>
+                </div>
+
+                <!-- KEY DATES -->
+                <div class="monthly-left collapsible">
+                    <h4 class="collapsible-header">
+                        Month's Key Dates to Help You Plan the Month
+                    </h4>
+                    <div class="collapsible-body">
+                        <ul id="event-list"></ul>
+                    </div>
+                </div>
+
+            </div>
         </div>
-      </div>
 
     </div>
-  </div>
-
 </div>
 
-<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-
-<!-- EXTERNAL DATA FILES -->
-<script src="calendar-events.js"></script>
 <script src="evo-calendar.min.js"></script>
 
+<!-- External Data -->
+<script src="calendar-events.js"></script>
+
 <script>
-$(document).ready(function () {
+let taskData = [];
 
-  /* ================= EVENTS ================= */
-  const calendarEvents = window.calendarEvents || [];
-
-  /* ===== COLOR NORMALIZATION ===== */
-  calendarEvents.forEach(ev => {
-    const d = (ev.description || "").toLowerCase();
-
-    if (d.includes("sunday") || d.includes("2nd saturday") || d.includes("4th saturday"))
-      ev.color = "#3fa9f5";       // Blue
-    else if (ev.type === "Restricted Holiday")
-      ev.color = "#ffd700";       // Yellow
-    else if (d.includes("matri pitri"))
-      ev.color = "#32cd32";       // Green
-    else if (ev.type === "Holiday")
-      ev.color = "#ff8c00";       // Orange
-    else
-      ev.color = "#ffffff";
-  });
-
-  /* ================= INIT CALENDAR ================= */
-  $('#calendar').evoCalendar({
-    theme: 'midnight-blue',
-    calendarEvents: calendarEvents
-  });
-
-  /* ================= QUOTES ================= */
-  const monthQuotes = [
+const monthQuotes = [
     "The beginning of the year is the perfect time to set your goals high and work tirelessly toward them.",
     "A workplace isn't just a space to work; it's a space to grow.",
     "Teamwork transforms effort into excellence.",
@@ -100,85 +73,58 @@ $(document).ready(function () {
     "Every challenge is an opportunity to grow.",
     "Motivation multiplies when shared.",
     "Finish strong, together."
-  ];
+];
 
-  /* ================= TASKS ================= */
-  let taskData = [];
+/* ===== ACTIVE YEAR & MONTH FROM EVO CALENDAR ===== */
+function getActiveYearMonth() {
+    const activeDate = $('#calendar').evoCalendar('getActiveDate');
+    const d = new Date(activeDate);
+    return { year: d.getFullYear(), month: d.getMonth() };
+}
 
-  fetch('tasks.json')
-    .then(r => r.json())
-    .then(data => {
-      taskData = data;
-      syncPanels(getActiveMonth());
+/* ===== KEY DATES ===== */
+function populateMonthlyEvents() {
+    const list = $('#event-list').empty();
+    const { year, month } = getActiveYearMonth();
+
+    const filtered = calendarEvents.filter(ev => {
+        const d = new Date(ev.date);
+        return d.getFullYear() === year && d.getMonth() === month;
     });
 
-  /* ================= HELPERS ================= */
-  function getActiveMonth() {
-    const active = $('.calendar-active').data('date-val');
-    return active ? new Date(active).getMonth() : new Date().getMonth();
-  }
-
-  function fmt(d){
-    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-  }
-
-  /* ================= KEY DATES ================= */
-function populateMonthlyEvents(month) {
-    const list = $('#event-list');
-    list.empty();
-
-    const TARGET_YEAR = 2026;
-
-    const events = calendarEvents
-        .filter(e => {
-            const d = new Date(e.date);
-            return d.getFullYear() === TARGET_YEAR && d.getMonth() === month;
-        })
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    if (!events.length) {
-        list.append('<li style="color:#888;">No key dates for this month.</li>');
+    if (!filtered.length) {
+        list.append('<li class="muted">No key dates this month.</li>');
         return;
     }
 
-    events.forEach(ev => {
-        const d = new Date(ev.date);
-        const dt =
-            `${String(d.getDate()).padStart(2,'0')}/` +
-            `${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-
-        list.append(`
-            <li>
-                <span style="color:#ffffff;">${dt} – </span>
-                <span style="color:${ev.color};">
-                    ${ev.description}
-                </span>
-            </li>
-        `);
-    });
+    filtered.sort((a,b)=>new Date(a.date)-new Date(b.date))
+        .forEach(ev => {
+            const d = new Date(ev.date);
+            list.append(`
+                <li>
+                    <span class="date">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}</span>
+                    <span style="color:${ev.color}"> – ${ev.description}</span>
+                </li>
+            `);
+        });
 }
 
-
-  /* ================= TASK PANEL ================= */
-function populateMonthlyTasks(month) {
-    const list = $('#task-list');
-    list.empty();
-
-    const TARGET_YEAR = 2026;
+/* ===== TASKS ===== */
+function populateMonthlyTasks() {
+    const list = $('#task-list').empty();
+    const { year, month } = getActiveYearMonth();
 
     taskData.forEach(t => {
         const s = new Date(t.start);
         const e = new Date(t.end);
 
         if (
-            (s.getFullYear() === TARGET_YEAR && s.getMonth() === month) ||
-            (e.getFullYear() === TARGET_YEAR && e.getMonth() === month)
+            (s.getFullYear() === year && s.getMonth() === month) ||
+            (e.getFullYear() === year && e.getMonth() === month)
         ) {
             list.append(`
                 <li>
-                    <span class="task-period">
-                        ${fmt(s)} – ${fmt(e)}
-                    </span><br>
+                    <span class="task-period">${fmt(s)} – ${fmt(e)}</span><br>
                     <span class="task-text">${t.description}</span>
                 </li>
             `);
@@ -186,26 +132,39 @@ function populateMonthlyTasks(month) {
     });
 }
 
+function fmt(d){
+    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
 
-  /* ================= SYNC ALL ================= */
-  function syncPanels(month) {
-    $('#quote-text').text(monthQuotes[month]);
-    populateMonthlyEvents(month);
-    populateMonthlyTasks(month);
-  }
+/* ===== INIT ===== */
+$(document).ready(function () {
 
-  /* ================= EVENTS ================= */
-  $('#calendar').on('selectDate', function () {
-    syncPanels(getActiveMonth());
-  });
+    $('#calendar').evoCalendar({
+        theme: 'midnight-blue',
+        calendarEvents: calendarEvents
+    });
 
-  $('.collapsible-header').on('click', function(){
-    $(this).next('.collapsible-body').slideToggle();
-  });
+    fetch('tasks.json')
+        .then(r => r.json())
+        .then(data => {
+            taskData = data;
+            refreshPanels();
+        });
 
-  /* ================= INIT ================= */
-  syncPanels(new Date().getMonth());
+    function refreshPanels() {
+        const { month } = getActiveYearMonth();
+        $('#quote-text').text(monthQuotes[month]);
+        populateMonthlyEvents();
+        populateMonthlyTasks();
+    }
 
+    $('#calendar').on('selectMonth selectYear', refreshPanels);
+
+    $('.collapsible-header').on('click', function(){
+        $(this).next('.collapsible-body').slideToggle();
+    });
+
+    refreshPanels();
 });
 </script>
 

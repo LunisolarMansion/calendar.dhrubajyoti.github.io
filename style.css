@@ -4,11 +4,6 @@ body{background:#000;margin:0;color:white}
 .hero{padding:20px}
 .content-flow{display:flex;flex-direction:column;gap:20px}
 
-/* MONTH SELECTOR */
-.mobile-month-selector{display:none}
-.mobile-month-selector select{
-  width:100%;padding:10px;border-radius:6px;font-size:15px
-}
 
 /* QUOTE */
 #monthly-quote{

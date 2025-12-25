@@ -13,39 +13,27 @@
 <body>
 
 <div class="hero">
-    <div class="content-flow">
 
-        <!-- CALENDAR -->
-        <div id="calendar"></div>
+    <div id="calendar"></div>
 
-        <!-- QUOTE -->
-        <div id="monthly-quote">
-            <p id="quote-text"></p>
+    <!-- QUOTE -->
+    <div id="monthly-quote">
+        <p id="quote-text"></p>
+    </div>
+
+    <!-- PANELS -->
+    <div class="monthly-grid">
+
+        <!-- TASKS -->
+        <div>
+            <h4 class="section-title">Important Tasks / Milestones</h4>
+            <ul id="task-list"></ul>
         </div>
 
-        <!-- MONTHLY PANELS -->
-        <div id="monthly-events">
-            <div class="monthly-grid">
-
-                <!-- TASKS -->
-                <div class="monthly-right collapsible">
-                    <h4 class="collapsible-header">Important Tasks / Milestones</h4>
-                    <div class="collapsible-body">
-                        <ul id="task-list"></ul>
-                    </div>
-                </div>
-
-                <!-- KEY DATES -->
-                <div class="monthly-left collapsible">
-                    <h4 class="collapsible-header">
-                        Month's Key Dates to Help You Plan the Month
-                    </h4>
-                    <div class="collapsible-body">
-                        <ul id="event-list"></ul>
-                    </div>
-                </div>
-
-            </div>
+        <!-- KEY DATES -->
+        <div>
+            <h4 class="section-title">Month's Key Dates to Help You Plan the Month</h4>
+            <ul id="event-list"></ul>
         </div>
 
     </div>
@@ -53,13 +41,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script src="evo-calendar.min.js"></script>
-
-<!-- External Data -->
 <script src="calendar-events.js"></script>
 
 <script>
-let taskData = [];
-
+/* ================= QUOTES ================= */
 const monthQuotes = [
     "The beginning of the year is the perfect time to set your goals high and work tirelessly toward them.",
     "A workplace isn't just a space to work; it's a space to grow.",
@@ -75,97 +60,95 @@ const monthQuotes = [
     "Finish strong, together."
 ];
 
-/* ===== ACTIVE YEAR & MONTH FROM EVO CALENDAR ===== */
-function getActiveYearMonth() {
-    const activeDate = $('#calendar').evoCalendar('getActiveDate');
-    const d = new Date(activeDate);
-    return { year: d.getFullYear(), month: d.getMonth() };
-}
+/* ================= INIT CALENDAR ================= */
+$('#calendar').evoCalendar({
+    theme: 'midnight-blue',
+    calendarEvents: calendarEvents
+});
 
-/* ===== KEY DATES ===== */
-function populateMonthlyEvents() {
-    const list = $('#event-list').empty();
-    const { year, month } = getActiveYearMonth();
-
-    const filtered = calendarEvents.filter(ev => {
-        const d = new Date(ev.date);
-        return d.getFullYear() === year && d.getMonth() === month;
+/* ================= LOAD TASKS ================= */
+let taskData = [];
+fetch('tasks.json')
+    .then(r => r.json())
+    .then(d => {
+        taskData = d;
+        syncPanels();
     });
 
-    if (!filtered.length) {
-        list.append('<li class="muted">No key dates this month.</li>');
-        return;
-    }
+/* ================= CORE SYNC FUNCTION ================= */
+function syncPanels() {
 
-    filtered.sort((a,b)=>new Date(a.date)-new Date(b.date))
-        .forEach(ev => {
-            const d = new Date(ev.date);
-            list.append(`
+    const activeDate = $('#calendar').evoCalendar('getActiveDate');
+    const d = new Date(activeDate);
+
+    const year = d.getFullYear();
+    const month = d.getMonth();
+
+    /* QUOTE */
+    $('#quote-text').text(monthQuotes[month]);
+
+    /* KEY DATES */
+    const eventList = $('#event-list').empty();
+    const events = calendarEvents.filter(e => {
+        const ed = new Date(e.date);
+        return ed.getFullYear() === year && ed.getMonth() === month;
+    });
+
+    if (!events.length) {
+        eventList.append('<li class="empty">No key dates this month.</li>');
+    } else {
+        events.sort((a,b)=>new Date(a.date)-new Date(b.date));
+        events.forEach(e=>{
+            eventList.append(`
                 <li>
-                    <span class="date">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}</span>
-                    <span style="color:${ev.color}"> – ${ev.description}</span>
+                    <span>${format(e.date)}</span> —
+                    <span style="color:${e.color}">${e.description}</span>
                 </li>
             `);
         });
-}
+    }
 
-/* ===== TASKS ===== */
-function populateMonthlyTasks() {
-    const list = $('#task-list').empty();
-    const { year, month } = getActiveYearMonth();
+    /* TASKS */
+    const taskList = $('#task-list').empty();
+    const today = new Date();
 
-    taskData.forEach(t => {
+    const tasks = taskData.filter(t=>{
         const s = new Date(t.start);
         const e = new Date(t.end);
-
-        if (
+        return (
             (s.getFullYear() === year && s.getMonth() === month) ||
             (e.getFullYear() === year && e.getMonth() === month)
-        ) {
-            list.append(`
+        );
+    });
+
+    if (!tasks.length) {
+        taskList.append('<li class="empty">No tasks this month.</li>');
+    } else {
+        tasks.forEach(t=>{
+            const end = new Date(t.end);
+            const diff = Math.ceil((end - today)/(86400000));
+            const cd = diff < 0 ? 'OVERDUE' : diff === 0 ? 'D-DAY' : `D-${diff}`;
+            taskList.append(`
                 <li>
-                    <span class="task-period">${fmt(s)} – ${fmt(e)}</span><br>
+                    <span class="task-date">${format(t.start)} – ${format(t.end)}</span>
+                    <span class="countdown">${cd}</span><br>
                     <span class="task-text">${t.description}</span>
                 </li>
             `);
-        }
-    });
-}
-
-function fmt(d){
-    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-}
-
-/* ===== INIT ===== */
-$(document).ready(function () {
-
-    $('#calendar').evoCalendar({
-        theme: 'midnight-blue',
-        calendarEvents: calendarEvents
-    });
-
-    fetch('tasks.json')
-        .then(r => r.json())
-        .then(data => {
-            taskData = data;
-            refreshPanels();
         });
-
-    function refreshPanels() {
-        const { month } = getActiveYearMonth();
-        $('#quote-text').text(monthQuotes[month]);
-        populateMonthlyEvents();
-        populateMonthlyTasks();
     }
+}
 
-    $('#calendar').on('selectMonth selectYear', refreshPanels);
+/* ================= LISTENERS ================= */
+$('#calendar').on('selectDate changeMonth changeYear', syncPanels);
 
-    $('.collapsible-header').on('click', function(){
-        $(this).next('.collapsible-body').slideToggle();
-    });
-
-    refreshPanels();
-});
+/* ================= HELPERS ================= */
+function format(d){
+    const x = new Date(d);
+    return String(x.getDate()).padStart(2,'0')+'/'+
+           String(x.getMonth()+1).padStart(2,'0')+'/'+
+           x.getFullYear();
+}
 </script>
 
 </body>

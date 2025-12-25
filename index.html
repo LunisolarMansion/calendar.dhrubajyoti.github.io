@@ -87,7 +87,7 @@ function syncPanels() {
     /* QUOTE */
     $('#quote-text').text(monthQuotes[month]);
 
-    /* KEY DATES */
+    /* ================= KEY DATES ================= */
     const eventList = $('#event-list').empty();
     const events = calendarEvents.filter(e => {
         const ed = new Date(e.date);
@@ -108,9 +108,10 @@ function syncPanels() {
         });
     }
 
-    /* TASKS */
+    /* ================= TASKS ================= */
     const taskList = $('#task-list').empty();
     const today = new Date();
+    today.setHours(0,0,0,0);
 
     const tasks = taskData.filter(t=>{
         const s = new Date(t.start);
@@ -126,12 +127,25 @@ function syncPanels() {
     } else {
         tasks.forEach(t=>{
             const end = new Date(t.end);
-            const diff = Math.ceil((end - today)/(86400000));
-            const cd = diff < 0 ? 'OVERDUE' : diff === 0 ? 'D-DAY' : `D-${diff}`;
+            end.setHours(0,0,0,0);
+
+            const diff = Math.ceil((end - today) / 86400000);
+
+            let countdownText;
+            if (diff < 0) {
+                countdownText = `Overdue by ${Math.abs(diff)} Days`;
+            } else if (diff === 0) {
+                countdownText = `Today`;
+            } else if (diff === 1) {
+                countdownText = `1 Day Remaining`;
+            } else {
+                countdownText = `${diff} Days Remaining`;
+            }
+
             taskList.append(`
                 <li>
                     <span class="task-date">${format(t.start)} – ${format(t.end)}</span>
-                    <span class="countdown">${cd}</span><br>
+                    <span class="countdown">${countdownText}</span><br>
                     <span class="task-text">${t.description}</span>
                 </li>
             `);
@@ -145,8 +159,8 @@ $('#calendar').on('selectDate changeMonth changeYear', syncPanels);
 /* ================= HELPERS ================= */
 function format(d){
     const x = new Date(d);
-    return String(x.getDate()).padStart(2,'0')+'/'+
-           String(x.getMonth()+1).padStart(2,'0')+'/'+
+    return String(x.getDate()).padStart(2,'0') + '/' +
+           String(x.getMonth()+1).padStart(2,'0') + '/' +
            x.getFullYear();
 }
 </script>

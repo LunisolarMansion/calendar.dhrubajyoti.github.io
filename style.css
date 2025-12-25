@@ -10,7 +10,7 @@ body{background:#000;margin:0;color:white}
   background:#081a2c;border:1px solid #1c4e80;
   border-radius:10px;padding:18px;text-align:center
 }
-#monthly-quote p{color:white;font-size:17px;font-weight:600}
+#monthly-quote p{color:Lime;font-size:17px;font-weight:600}
 
 /* GRID */
 .monthly-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:30px}
@@ -33,7 +33,7 @@ h4{color:white;text-align:center}
   border-radius:12px;font-size:12px;font-weight:700;margin-left:8px
 }
 .task-countdown{font-size:12px;font-weight:700;margin-left:8px;color:#ffcc00}
-.task-countdown.overdue{color:#ff4444}
+.task-countdown.overdue{color:#eb8dff}
 
 /* MOBILE */
 @media(max-width:768px){

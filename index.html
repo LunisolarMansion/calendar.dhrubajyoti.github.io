@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,49 +14,49 @@
 
 <div class="hero">
 
-    <!-- MOBILE MONTH SELECTOR -->
-    <div class="mobile-month-selector">
-        <select id="monthSelect"></select>
+  <!-- MOBILE MONTH SELECTOR -->
+  <div class="mobile-month-selector">
+    <select id="monthSelect"></select>
+  </div>
+
+  <div class="content-flow">
+
+    <!-- CALENDAR -->
+    <div id="calendar"></div>
+
+    <!-- QUOTE -->
+    <div id="monthly-quote">
+      <p id="quote-text"></p>
     </div>
 
-    <div class="content-flow">
+    <!-- PANELS -->
+    <div id="monthly-events">
+      <div class="monthly-grid">
 
-        <!-- CALENDAR -->
-        <div id="calendar"></div>
-
-        <!-- QUOTE -->
-        <div id="monthly-quote">
-            <p id="quote-text"></p>
+        <!-- IMPORTANT TASKS -->
+        <div class="monthly-right collapsible collapsed">
+          <h4 class="collapsible-header sticky-header">
+            Important Tasks / Milestones
+          </h4>
+          <div class="collapsible-body">
+            <ul id="task-list"></ul>
+          </div>
         </div>
 
-        <!-- PANELS -->
-        <div id="monthly-events">
-            <div class="monthly-grid">
-
-                <!-- IMPORTANT TASKS -->
-                <div class="monthly-right collapsible">
-                    <h4 class="collapsible-header sticky-header">
-                        Important Tasks / Milestones
-                    </h4>
-                    <div class="collapsible-body">
-                        <ul id="task-list"></ul>
-                    </div>
-                </div>
-
-                <!-- KEY DATES -->
-                <div class="monthly-left collapsible">
-                    <h4 class="collapsible-header">
-                        Month's Key Dates to Help You Plan the Month
-                    </h4>
-                    <div class="collapsible-body">
-                        <ul id="event-list"></ul>
-                    </div>
-                </div>
-
-            </div>
+        <!-- KEY DATES -->
+        <div class="monthly-left collapsible open">
+          <h4 class="collapsible-header">
+            Month's Key Dates to Help You Plan the Month
+          </h4>
+          <div class="collapsible-body">
+            <ul id="event-list"></ul>
+          </div>
         </div>
 
+      </div>
     </div>
+
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
@@ -65,328 +65,145 @@
 <script>
 $(document).ready(function () {
 
-/* ================= MONTH SELECTOR ================= */
-const months = [
-  "January","February","March","April","May","June",
-  "July","August","September","October","November","December"
-];
+  /* ================= MONTH SELECTOR ================= */
+  const months = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
 
-months.forEach((m,i)=>{
-  $('#monthSelect').append(`<option value="${i}">${m}</option>`);
-});
+  months.forEach((m,i)=>{
+    $('#monthSelect').append(`<option value="${i}">${m}</option>`);
+  });
 
-const currentMonth = new Date().getMonth();
-$('#monthSelect').val(currentMonth);
+  /* ================= EVENTS ================= */
+  const calendarEvents = window.calendarEvents || []; // keep your full list as-is
 
-/* ================= EVENTS (FULL LIST – SHORTENED HERE) ================= */
-/* ⚠️ KEEP YOUR FULL LIST EXACTLY AS YOU PROVIDED */
-const calendarEvents = [
-        /* 🔹 YOUR FULL 2026 HOLIDAY LIST — UNCHANGED 🔹 */
-        
-{ id: 'event_00', name: "", date: "2026/01/01", description: "Happy New Year_ from Dhrubajyoti - Please Visit : <a href='https://lunisolarmansion.github.io/Login/' target='_blank' style='color: lime;'>dhrubajyoti's rural repository</a>", type: "holiday", everyYear: true },
+  /* ================= NORMALISE COLOURS ================= */
+  calendarEvents.forEach(ev=>{
+    const d=(ev.description||"").toLowerCase();
+    if(d.includes("sunday")||d.includes("2nd saturday")||d.includes("4th saturday"))
+      ev.color="#3fa9f5";
+    else if(ev.type==="Restricted Holiday")
+      ev.color="#ffd700";
+    else if(d.includes("matri pitri"))
+      ev.color="#32cd32";
+    else if(ev.type==="Holiday")
+      ev.color="#ff8c00";
+  });
 
-{ id: 'event_01', name: "Restricted Holiday", date: "2026/01/01", description: "New Year's Day", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_03', name: "Restricted Holiday", date: "2026/01/05", description: "Rongker Karkli", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_06', name: "Restricted Holiday", date: "2026/01/13", description: "Uruka of Magh Bihu", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_09', name: "Restricted Holiday", date: "2026/01/17", description: "Silpi Divas", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_15', name: "Restricted Holiday", date: "2026/01/27", description: "Busu Dima Festival", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_22', name: "Restricted Holiday", date: "2026/02/04", description: "Shab-E-Barat", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_24', name: "Restricted Holiday", date: "2026/02/17", description: "Karbi-Dehal-Kachir Dom", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_25', name: "Restricted Holiday", date: "2026/02/18", description: "Ali-Aye-Ligang", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_28', name: "Restricted Holiday", date: "2026/02/15", description: "Sivaratri", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_32', name: "Restricted Holiday", date: "2026/03/02", description: "Khring Khring Baithow Puja", type: "Restricted Holiday", everyYear: false, color: "#ffff00"  },
-{ id: 'event_37', name: "Restricted Holiday", date: "2026/03/17", description: "Lailatur Qadar", type: "Restricted Holiday", everyYear: false, color: "#ffff00"  },
-{ id: 'event_42', name: "Restricted Holiday", date: "2026/03/31", description: "Mahabir Jayanti", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_48', name: "Restricted Holiday", date: "2026/04/15", description: "Deuri Bihu", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_50', name: "Restricted Holiday", date: "2026/04/18", description: "Birthday of Gurudev Kalicharan Brahma", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_51', name: "Restricted Holiday", date: "2026/04/04", description: "Easter Saturday", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_58', name: "Restricted Holiday", date: "2026/04/22", description: "Tithi of Gopal Dev", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_63', name: "Restricted Holiday", date: "2026/05/01", description: "Sati Radhika Utsav", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_66', name: "Restricted Holiday", date: "2026/05/24", description: "Motak Roja Swargadeo Sarbananda Singha Divas", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_68', name: "Restricted Holiday", date: "2026/05/16", description: "Tithi of Hari Dev", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_70', name: "Restricted Holiday", date: "2026/05/23", description: "Birthday of Sri Krishnaguru", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_73', name: "Restricted Holiday", date: "2026/05/31", description: "Baikhowa Festival", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_77', name: "Restricted Holiday", date: "2026/06/20", description: "Death Anniversary of Bishnu Prasad Rabha", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_81', name: "Restricted Holiday", date: "2026/06/30", description: "Hul Divas", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_85', name: "Restricted Holiday", date: "2026/07/13", description: "Birthday of Nepali Poet Bhanu Bhakta Acharya", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_92', name: "Restricted Holiday", date: "2026/08/13", description: "Deth Anniversary of Bir Tikendrajit", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_98', name: "Restricted Holiday", date: "2026/09/15", description: "Nau Khai Festival", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_101', name: "Restricted Holiday", date: "2026/08/26", description: "Fateha-e-Dwaz Daham", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_107', name: "Restricted Holiday", date: "2026/09/16", description: "Birthday of Sri Sri Thakur Anukul Chandra", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_125', name: "Restricted Holiday", date: "2026/11/11", description: "Abhibhav Tithi of Sri Sri Bhubaneswar Sadhu Thakur", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_129', name: "Restricted Holiday", date: "2026/11/01", description: "Kuki Chavang kut", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_132', name: "Restricted Holiday", date: "2026/11/07", description: "Wangala Festival", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_136', name: "Restricted Holiday", date: "2026/11/19", description: "Bir Raghav Moran Divas", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_142', name: "Restricted Holiday", date: "2026/11/24", description: "Death Anniversary of Guru Tegh Bahadur Ji", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_145', name: "Restricted Holiday", date: "2026/12/22", description: "Gaan Ngai", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_146', name: "Restricted Holiday", date: "2026/12/05", description: "Sikpui Ruoi (Harvest Festival of Hmar Community)", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_148', name: "Restricted Holiday", date: "2026/12/10", description: "Martyr's Day", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_152', name: "Restricted Holiday", date: "2026/12/24", description: "Christmas Eve", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_156', name: "Restricted Holiday", date: "2026/12/19", description: "Death Anniversary of Shree Shree Aniruddhadev", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
-{ id: 'event_160', name: "Restricted Holiday", date: "2026/03/25", description: "Tora Chira Bihu", type: "Restricted Holiday", everyYear: false, color: "#ffff00" },
+  /* ================= CALENDAR INIT ================= */
+  $('#calendar').evoCalendar({
+    theme:'midnight-blue',
+    calendarEvents: calendarEvents
+  });
 
+  /* ================= QUOTES ================= */
+  const monthQuotes = [
+    "The beginning of the year is the perfect time to set your goals high and work tirelessly toward them.",
+    "A workplace isn't just a space to work; it's a space to grow.",
+    "Teamwork transforms effort into excellence.",
+    "Collaboration unlocks creative potential.",
+    "Consistency is the bridge between goals and achievement.",
+    "A positive workplace is the foundation of success.",
+    "Teamwork fuels extraordinary outcomes.",
+    "Great achievements are built together.",
+    "Hard work turns dreams into reality.",
+    "Every challenge is an opportunity to grow.",
+    "Motivation multiplies when shared.",
+    "Finish strong, together."
+  ];
 
-{ id: 'event_02', name: "Holiday", date: "2026/01/04", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_05', name: "Holiday", date: "2026/01/11", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_10', name: "Holiday", date: "2026/01/18", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_13', name: "Holiday", date: "2026/01/25", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_18', name: "Holiday", date: "2026/02/01", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_20', name: "Holiday", date: "2026/02/08", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_23', name: "Holiday", date: "2026/02/15", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_27', name: "Holiday", date: "2026/02/22", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_29', name: "Holiday", date: "2026/03/01", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_31', name: "Holiday", date: "2026/03/08", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_34', name: "Holiday", date: "2026/03/15", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_36', name: "Holiday", date: "2026/03/22", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_38', name: "Holiday", date: "2026/03/29", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_41', name: "Holiday", date: "2026/04/05", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_44', name: "Holiday", date: "2026/04/12", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_52', name: "Holiday", date: "2026/04/19", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_55', name: "Holiday", date: "2026/04/26", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_59', name: "Holiday", date: "2026/05/03", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_61', name: "Holiday", date: "2026/05/10", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_64', name: "Holiday", date: "2026/05/17", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_67', name: "Holiday", date: "2026/05/24", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_69', name: "Holiday", date: "2026/05/31", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_72', name: "Holiday", date: "2026/06/07", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_76', name: "Holiday", date: "2026/06/14", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_78', name: "Holiday", date: "2026/06/21", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_80', name: "Holiday", date: "2026/06/28", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_82', name: "Holiday", date: "2026/07/05", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_84', name: "Holiday", date: "2026/07/12", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_86', name: "Holiday", date: "2026/07/19", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_88', name: "Holiday", date: "2026/07/26", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_89', name: "Holiday", date: "2026/08/02", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_91', name: "Holiday", date: "2026/08/09", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_94', name: "Holiday", date: "2026/08/16", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_96', name: "Holiday", date: "2026/08/23", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_99', name: "Holiday", date: "2026/08/30", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_102', name: "Holiday", date: "2026/09/06", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_106', name: "Holiday", date: "2026/09/13", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_108', name: "Holiday", date: "2026/09/20", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_110', name: "Holiday", date: "2026/09/27", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_117', name: "Holiday", date: "2026/10/04", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_120', name: "Holiday", date: "2026/10/11", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_122', name: "Holiday", date: "2026/10/18", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_127', name: "Holiday", date: "2026/10/25", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_130', name: "Holiday", date: "2026/11/01", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_134', name: "Holiday", date: "2026/11/08", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_135', name: "Holiday", date: "2026/11/15", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_140', name: "Holiday", date: "2026/11/22", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_147', name: "Holiday", date: "2026/11/29", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_150', name: "Holiday", date: "2026/12/06", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_151', name: "Holiday", date: "2026/12/13", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_155', name: "Holiday", date: "2026/12/20", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_157', name: "Holiday", date: "2026/12/27", description: "Sunday", type: "Holiday", everyYear: false, color: "#FF0000" },
-
-
-
-
-{ id: 'event_04', name: "Holiday", date: "2026/01/10", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_12', name: "Holiday", date: "2026/01/24", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_19', name: "Holiday", date: "2026/02/14", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_26', name: "Holiday", date: "2026/02/28", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_30', name: "Holiday", date: "2026/03/14", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_35', name: "Holiday", date: "2026/03/28", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_43', name: "Holiday", date: "2026/04/11", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_54', name: "Holiday", date: "2026/04/25", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_60', name: "Holiday", date: "2026/05/09", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_65', name: "Holiday", date: "2026/05/23", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_75', name: "Holiday", date: "2026/06/13", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_79', name: "Holiday", date: "2026/06/27", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_83', name: "Holiday", date: "2026/07/11", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_87', name: "Holiday", date: "2026/07/25", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_90', name: "Holiday", date: "2026/08/08", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_95', name: "Holiday", date: "2026/08/22", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_104', name: "Holiday", date: "2026/09/12", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_109', name: "Holiday", date: "2026/09/26", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_119', name: "Holiday", date: "2026/10/10", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000"  },
-{ id: 'event_126', name: "Holiday", date: "2026/10/24", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_133', name: "Holiday", date: "2026/11/14", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_139', name: "Holiday", date: "2026/11/28", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_149', name: "Holiday", date: "2026/12/12", description: "2nd Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_154', name: "Holiday", date: "2026/12/26", description: "4th Saturday", type: "Holiday", everyYear: false, color: "#FF0000" },
-
-
-
-{ id: 'event_07', name: "Holiday", date: "2026/01/14", description: "Magh Bihu & Tusu Puja", type: "Holiday", everyYear: false, color: "#FF0000"  },
-{ id: 'event_08', name: "Holiday", date: "2026/01/15", description: "Magh Bihu & Tusu Puja", type: "Holiday", everyYear: false, color: "#FF0000"  },
-{ id: 'event_11', name: "Holiday", date: "2026/01/23", description: "Netaji's Birthday", type: "Holiday", everyYear: false, color: "#FF0000"  },
-{ id: 'event_14', name: "Holiday", date: "2026/01/26", description: "Republic Day", type: "Holiday", everyYear: false, color: "#FF0000"  },
-{ id: 'event_16', name: "Holiday", date: "2026/01/27", description: "Gwthar Bathou San", type: "Holiday", everyYear: false, color: "#FF0000"  },
-{ id: 'event_17', name: "Holiday", date: "2026/01/31", description: "Me-Dam-Me-Phi", type: "Holiday", everyYear: false, color: "#FF0000"  },
-{ id: 'event_21', name: "Holiday", date: "2026/02/01", description: "Bir Chilaray Divas", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_33', name: "Holiday", date: "2026/03/03", description: "Dol Jatra", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_39', name: "Holiday", date: "2026/03/21", description: "Id- UI -Fitre", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_45', name: "Holiday", date: "2026/04/14", description: "Bohag Bihu", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_46', name: "Holiday", date: "2026/04/15", description: "Bohag Bihu", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_47', name: "Holiday", date: "2026/04/16", description: "Bohag Bihu", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_49', name: "Holiday", date: "2026/04/03", description: "Good Friday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_53', name: "Holiday", date: "2026/04/21", description: "Sati Sadhani Divas", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_56', name: "Holiday", date: "2026/04/18", description: "Tithi of Damodar Dev", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_57', name: "Holiday", date: "2026/05/01", description: "May Day", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_62', name: "Holiday", date: "2026/05/01", description: "Buddha Purnima", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_71', name: "Holiday", date: "2026/05/27", description: "Id-ul-Zuha", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_74', name: "Holiday", date: "2026/06/01", description: "Janmotsav of Sri Sri Madhabdeva", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_93', name: "Holiday", date: "2026/08/15", description: "Independence Day", type: "Holiday", everyYear: false, color: "#FF0000"  },
-{ id: 'event_97', name: "Holiday", date: "2026/09/12", description: "Tirubhav Tithi of Srimanta Sankardeva", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_100', name: "Holiday", date: "2026/09/22", description: "Karam Puja", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_103', name: "Holiday", date: "2026/09/01", description: "Tirubhav Tithi of Sri Sri Madhabdeva", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_105', name: "Holiday", date: "2026/09/04", description: "Janmastomi", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_111', name: "Holiday", date: "2026/10/18", description: "Durga Puja", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_112', name: "Holiday", date: "2026/10/19", description: "Durga Puja", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_113', name: "Holiday", date: "2026/10/20", description: "Durga Puja", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_114', name: "Holiday", date: "2026/10/21", description: "Vijoya Dasami ", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_115', name: "Holiday", date: "2026/09/21", description: "Janmotsav of Sri Sri Sankardev ", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_116', name: "Holiday", date: "2026/10/02", description: "Birth day of Mahatma Gandhi", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_121', name: "Holiday", date: "2026/10/18", description: "Kati Bihu", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_123', name: "Holiday", date: "2026/11/08", description: "Kali Puja & Diwali", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_124', name: "Holiday", date: "2026/11/11", description: "Bhatri Dwitiya", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_128', name: "Holiday", date: "2026/11/15", description: "Chhat Puja", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_131', name: "Holiday", date: "2026/11/24", description: "Guru Nanak's Birthday", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_141', name: "Holiday", date: "2026/11/24", description: "Lachit Divas", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_144', name: "Holiday", date: "2026/12/02", description: "Asom Divas (Su-Ka-Pha Divas)", type: "Holiday", everyYear: false, color: "#FF0000" },
-{ id: 'event_153', name: "Holiday", date: "2026/12/25", description: "Christmas Day", type: "Holiday", everyYear: false, color: "#FF0000" },
-
-
-
-
-{ id: 'event_40', name: "Bank Holiday", date: "2026/04/01", description: "Annual Closing of Bank Accounts", type: "Bank Holiday", everyYear: false, color: "White" },
-
-
-{ id: 'event_137', name: "Special Casual Leave", date: "2026/07/09", description: "Matri Pitri Vandana", type: "Special Casual Leave", everyYear: false, color: "#7cfc00" },
-{ id: 'event_138', name: "Special Casual Leave", date: "2026/07/10", description: "Matri Pitri Vandana", type: "Special Casual Leave", everyYear: false, color: "#7cfc00" },
-{ id: 'event_158', name: "Special Casual Leave", date: "2026/07/23", description: "Matri Pitri Vandana", type: "Special Casual Leave", everyYear: false, color: "#7cfc00" },
-{ id: 'event_159', name: "Special Casual Leave", date: "2026/07/24", description: "Matri Pitri Vandana", type: "Special Casual Leave", everyYear: false, color: "#7cfc00" },
-
-
-{ id: 'event_118', name: "Half Holiday", date: "2026/10/25", description: "Lakshmi Puja", type: "Half Holiday", everyYear: false, color: "#7cfc00" },
-
-
-
-
-
-
-        // your full list continues here unchanged
-    ];
-
-
-/* ================= COLOR NORMALISATION ================= */
-calendarEvents.forEach(ev=>{
-  const d=(ev.description||'').toLowerCase();
-  if(d.includes('sunday')||d.includes('2nd saturday')||d.includes('4th saturday'))
-    ev.color='#3fa9f5';
-  else if(ev.type==='Restricted Holiday')
-    ev.color='#ffd700';
-  else if(d.includes('matri pitri'))
-    ev.color='#32cd32';
-  else if(ev.type==='Holiday')
-    ev.color='#ff8c00';
-});
-
-/* ================= CALENDAR INIT ================= */
-$('#calendar').evoCalendar({
-  theme:'midnight-blue',
-  calendarEvents: calendarEvents
-});
-
-/* ================= QUOTES ================= */
-const monthQuotes=[
- "The beginning of the year is the perfect time to set your goals high and work tirelessly toward them.",
- "A workplace isn't just a space to work; it's a space to grow.",
- "Teamwork transforms effort into excellence.",
- "Collaboration unlocks creative potential.",
- "Consistency is the bridge between goals and achievement.",
- "A positive workplace is the foundation of success.",
- "Teamwork fuels extraordinary outcomes.",
- "Great achievements are built together.",
- "Hard work turns dreams into reality.",
- "Every challenge is an opportunity to grow.",
- "Motivation multiplies when shared.",
- "Finish strong, together."
-];
-
-function setQuote(m){ $('#quote-text').text(monthQuotes[m]); }
-
-/* ================= KEY DATES ================= */
-function populateMonthlyEvents(month){
-  const list=$('#event-list').empty();
-  const evs=calendarEvents
-    .filter(e=>new Date(e.date).getMonth()===month)
-    .sort((a,b)=>new Date(a.date)-new Date(b.date));
-
-  if(!evs.length){
-    list.append('<li>No important dates this month.</li>');
-    return;
+  function setQuote(m){
+    $('#quote-text').text(monthQuotes[m]);
   }
 
-  evs.forEach(ev=>{
-    const d=new Date(ev.date);
-    const dt=`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-    list.append(`
-      <li>
-        <span style="color:#fff;font-weight:600">${dt} - </span>
-        <span style="color:${ev.color};font-weight:600">${ev.description}</span>
-      </li>
-    `);
-  });
-}
+  /* ================= KEY DATES ================= */
+  function populateMonthlyEvents(month){
+    const list=$('#event-list').empty();
 
-/* ================= TASKS ================= */
-let taskData=[];
+    const evs = calendarEvents
+      .filter(e => new Date(e.date).getMonth() === month)
+      .sort((a,b)=>new Date(a.date)-new Date(b.date));
 
-fetch('tasks.json')
-.then(r=>r.json())
-.then(data=>{
-  taskData=data;
-  populateMonthlyTasks(currentMonth);
-});
+    if(!evs.length){
+      list.append('<li style="color:white">No important dates this month.</li>');
+      return;
+    }
 
-function populateMonthlyTasks(month){
-  const list=$('#task-list').empty();
-  const today=new Date(); today.setHours(0,0,0,0);
-
-  taskData.forEach(t=>{
-    const s=new Date(t.start);
-    const e=new Date(t.end);
-
-    if(s.getMonth()===month||e.getMonth()===month){
-      const diff=Math.ceil((e-today)/(1000*60*60*24));
-      const cd=diff<0?'OVERDUE':diff===0?'D-DAY':`D-${diff}`;
+    evs.forEach(ev=>{
+      const d=new Date(ev.date);
+      const dt=`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
 
       list.append(`
         <li>
-          <span class="task-period">${fmt(s)} – ${fmt(e)}</span>
-          <span class="task-chip">${t.badge||'TASK'}</span>
-          <span class="task-countdown ${diff<0?'overdue':''}">${cd}</span><br>
-          <span class="task-text">${t.description}</span>
+          <span class="date-text">${dt} - </span>
+          <span style="color:${ev.color};font-weight:600">${ev.description}</span>
         </li>
       `);
-    }
+    });
+  }
+
+  /* ================= TASKS ================= */
+  let taskData=[];
+
+  fetch('tasks.json')
+    .then(r=>r.json())
+    .then(data=>{
+      taskData=data;
+      populateMonthlyTasks(currentMonth);
+    });
+
+  function populateMonthlyTasks(month){
+    const list=$('#task-list').empty();
+    const today=new Date(); today.setHours(0,0,0,0);
+
+    taskData.forEach(t=>{
+      const s=new Date(t.start);
+      const e=new Date(t.end);
+
+      if(s.getMonth()===month || e.getMonth()===month){
+        const diff=Math.ceil((e-today)/(1000*60*60*24));
+        const cd=diff<0?'OVERDUE':diff===0?'D-DAY':`D-${diff}`;
+
+        list.append(`
+          <li>
+            <span class="task-period">${fmt(s)} – ${fmt(e)}</span>
+            <span class="task-chip">${t.badge||'TASK'}</span>
+            <span class="task-countdown ${diff<0?'overdue':''}">${cd}</span><br>
+            <span class="task-text">${t.description}</span>
+          </li>
+        `);
+      }
+    });
+  }
+
+  function fmt(d){
+    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+  }
+
+  /* ================= SYNC ALL ON MONTH CHANGE ================= */
+  function syncAll(month){
+    $('#monthSelect').val(month);
+    setQuote(month);
+    populateMonthlyEvents(month);
+    populateMonthlyTasks(month);
+  }
+
+  $('#calendar').on('selectMonth', (e,m)=>syncAll(m));
+  $('#calendar').on('selectYear', (e,y)=>syncAll($('#calendar').evoCalendar('getActiveMonth')));
+
+  $('#monthSelect').on('change', function(){
+    syncAll(Number(this.value));
   });
-}
 
-function fmt(d){
-  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-}
+  $('.collapsible-header').on('click',function(){
+    $(this).next('.collapsible-body').slideToggle();
+    $(this).parent().toggleClass('collapsed');
+  });
 
-/* ================= EVENTS ================= */
-$('#monthSelect').on('change',function(){
-  const m=Number(this.value);
-  populateMonthlyEvents(m);
-  populateMonthlyTasks(m);
-  setQuote(m);
-});
-
-$('.collapsible-header').on('click',function(){
-  $(this).next('.collapsible-body').slideToggle();
-  $(this).parent().toggleClass('collapsed');
-});
-
-/* ================= INIT ================= */
-if(window.innerWidth>768){ $('.collapsible-body').show(); }
-setQuote(currentMonth);
-populateMonthlyEvents(currentMonth);
+  /* ================= INIT ================= */
+  const currentMonth=new Date().getMonth();
+  syncAll(currentMonth);
 
 });
 </script>

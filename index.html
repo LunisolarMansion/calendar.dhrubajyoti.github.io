@@ -160,31 +160,32 @@ function populateMonthlyEvents(month) {
 
 
   /* ================= TASK PANEL ================= */
-  function populateMonthlyTasks(month) {
+function populateMonthlyTasks(month) {
     const list = $('#task-list');
     list.empty();
 
-    const today = new Date();
-    today.setHours(0,0,0,0);
+    const TARGET_YEAR = 2026;
 
     taskData.forEach(t => {
-      const s = new Date(t.start);
-      const e = new Date(t.end);
+        const s = new Date(t.start);
+        const e = new Date(t.end);
 
-      if (s.getMonth() === month || e.getMonth() === month) {
-        const diff = Math.ceil((e - today)/(1000*60*60*24));
-        const cd = diff < 0 ? "OVERDUE" : diff === 0 ? "D-DAY" : `D-${diff}`;
-
-        list.append(`
-          <li>
-            <span class="task-period">${fmt(s)} – ${fmt(e)}</span>
-            <span class="task-countdown ${diff<0?'overdue':''}">${cd}</span><br>
-            <span class="task-text">${t.description}</span>
-          </li>
-        `);
-      }
+        if (
+            (s.getFullYear() === TARGET_YEAR && s.getMonth() === month) ||
+            (e.getFullYear() === TARGET_YEAR && e.getMonth() === month)
+        ) {
+            list.append(`
+                <li>
+                    <span class="task-period">
+                        ${fmt(s)} – ${fmt(e)}
+                    </span><br>
+                    <span class="task-text">${t.description}</span>
+                </li>
+            `);
+        }
     });
-  }
+}
+
 
   /* ================= SYNC ALL ================= */
   function syncPanels(month) {

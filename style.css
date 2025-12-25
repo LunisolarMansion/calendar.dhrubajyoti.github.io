@@ -1,59 +1,46 @@
-* {
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-}
-
 body {
-    background: #000;
-    color: #fff;
+    background:#000;
+    font-family: "Inter", "Poppins", sans-serif;
+    color:#ccc;
 }
 
 .monthly-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 30px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    padding:30px;
 }
 
-.collapsible-header {
-    cursor: pointer;
-    user-select: none;
-    font-weight: 500;
+.section-title {
+    font-weight:500;
+    color:#fff;
+    margin-bottom:10px;
 }
 
-.collapsible-body {
-    margin-top: 10px;
+ul {
+    list-style:none;
+    padding:0;
 }
 
-#event-list li,
-#task-list li {
-    margin-bottom: 8px;
-    font-weight: 400;
-}
-
-.date {
-    color: #ffffff;
-}
-
-.task-period {
-    color: #ffffff;
-    font-size: 13px;
+li {
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:8px;
 }
 
 .task-text {
-    color: #e774ff;
-    font-weight: 400;
+    color:#e774ff;
 }
 
-.muted {
-    color: #888;
+.task-date {
+    color:#aaa;
 }
 
-@media (max-width: 768px) {
-    .monthly-grid {
-        grid-template-columns: 1fr;
-    }
+.countdown {
+    margin-left:10px;
+    color:#ffd700;
+}
 
-    .collapsible-body {
-        display: none;
-    }
+.empty {
+    color:#666;
 }

@@ -74,3 +74,30 @@ li {
         0 0 12px rgba(50, 205, 50, 0.15);
 }
 
+/* ================= MOBILE TYPOGRAPHY ================= */
+
+@media (max-width: 768px) {
+
+    /* Quote */
+    #quote-text {
+        font-size: 14px;
+        line-height: 1.45;
+        padding: 0 14px;
+    }
+
+    /* Section titles */
+    .section-title {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    /* Important Tasks & Month Key Dates text */
+    .tasks-list li,
+    .key-dates-list li {
+        font-size: 13.5px;
+        line-height: 1.5;
+        letter-spacing: 0.2px;
+    }
+}
+
+

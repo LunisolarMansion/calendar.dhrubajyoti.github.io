@@ -6,11 +6,11 @@ window.calendarEvents = [
 
 /* ================= RESTRICTED HOLIDAYS (2026) ================= */
 
-{ id:'RH01', name:'Restricted Holiday', date:'2026/01/01', description:'New Year’s Day', type:'Restricted Holiday', color:'#FFD700' },
-{ id:'RH02', name:'Restricted Holiday', date:'2026/01/05', description:'Rongker Karkli', type:'Restricted Holiday', color:'#FFD700' },
-{ id:'RH03', name:'Restricted Holiday', date:'2026/01/13', description:'Uruka of Magh Bihu', type:'Restricted Holiday', color:'#FFD700' },
-{ id:'RH04', name:'Restricted Holiday', date:'2026/01/17', description:'Silpi Divas', type:'Restricted Holiday', color:'#FFD700' },
-{ id:'RH05', name:'Restricted Holiday', date:'2026/01/27', description:'Busu Dima Festival', type:'Restricted Holiday', color:'#FFD700' },
+{ id:'RH01', name:'Restricted Holiday', date:'2026/01/01', description:'New Year’s Day', type:'Restricted Holiday', color:'#d8d8d8' },
+{ id:'RH02', name:'Restricted Holiday', date:'2026/01/05', description:'Rongker Karkli', type:'Restricted Holiday', color:'#d8d8d8' },
+{ id:'RH03', name:'Restricted Holiday', date:'2026/01/13', description:'Uruka of Magh Bihu', type:'Restricted Holiday', color:'#d8d8d8' },
+{ id:'RH04', name:'Restricted Holiday', date:'2026/01/17', description:'Silpi Divas', type:'Restricted Holiday', color:'#d8d8d8' },
+{ id:'RH05', name:'Restricted Holiday', date:'2026/01/27', description:'Busu Dima Festival', type:'Restricted Holiday', color:'#d8d8d8' },
 
 { id:'RH06', name:'Restricted Holiday', date:'2026/02/04', description:'Shab-E-Barat', type:'Restricted Holiday', color:'#FFD700' },
 { id:'RH07', name:'Restricted Holiday', date:'2026/02/15', description:'Sivaratri', type:'Restricted Holiday', color:'#FFD700' },

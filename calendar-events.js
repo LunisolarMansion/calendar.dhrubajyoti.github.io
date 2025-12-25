@@ -1,4 +1,55 @@
 /* =========================================================
+   AUTO-GENERATE WEEKLY HOLIDAYS (SUNDAYS + 2nd/4th SAT)
+   ========================================================= */
+
+function generateWeeklyHolidays(year) {
+  const events = [];
+  let idCounter = 9000;
+
+  for (let month = 0; month < 12; month++) {
+    let saturdays = [];
+
+    for (let day = 1; day <= 31; day++) {
+      const d = new Date(year, month, day);
+      if (d.getMonth() !== month) break;
+
+      const iso = `${year}/${String(month+1).padStart(2,'0')}/${String(day).padStart(2,'0')}`;
+
+      // Sunday
+      if (d.getDay() === 0) {
+        events.push({
+          id: `auto_${idCounter++}`,
+          name: "Holiday",
+          date: iso,
+          description: "Sunday",
+          type: "Holiday",
+          everyYear: false
+        });
+      }
+
+      // Saturday
+      if (d.getDay() === 6) {
+        saturdays.push(day);
+      }
+    }
+
+    // 2nd & 4th Saturday
+    [saturdays[1], saturdays[3]].forEach((satDay, idx) => {
+      if (!satDay) return;
+      events.push({
+        id: `auto_${idCounter++}`,
+        name: "Holiday",
+        date: `${year}/${String(month+1).padStart(2,'0')}/${String(satDay).padStart(2,'0')}`,
+        description: idx === 0 ? "2nd Saturday" : "4th Saturday",
+        type: "Holiday",
+        everyYear: false
+      });
+    });
+  }
+
+  return events;
+}
+/* =========================================================
    CALENDAR EVENTS – 2026
    This file is loaded BEFORE evo-calendar initialization
    ========================================================= */
@@ -56,6 +107,59 @@ window.calendarEvents = [
   { id:'event_156', name:'Restricted Holiday', date:'2026/12/19', description:'Death Anniversary of Shree Shree Aniruddhadev', type:'Restricted Holiday', everyYear:false },
   { id:'event_145', name:'Restricted Holiday', date:'2026/12/22', description:'Gaan Ngai', type:'Restricted Holiday', everyYear:false },
   { id:'event_152', name:'Restricted Holiday', date:'2026/12/24', description:'Christmas Eve', type:'Restricted Holiday', everyYear:false },
+
+
+/* ================= FIXED HOLIDAYS – 2026 ================= */
+
+  { id:'event_07',  name:'Holiday', date:'2026/01/14', description:'Magh Bihu & Tusu Puja', type:'Holiday', everyYear:false },
+  { id:'event_08',  name:'Holiday', date:'2026/01/15', description:'Magh Bihu & Tusu Puja', type:'Holiday', everyYear:false },
+  { id:'event_11',  name:'Holiday', date:'2026/01/23', description:"Netaji's Birthday", type:'Holiday', everyYear:false },
+  { id:'event_14',  name:'Holiday', date:'2026/01/26', description:'Republic Day', type:'Holiday', everyYear:false },
+  { id:'event_16',  name:'Holiday', date:'2026/01/27', description:'Gwthar Bathou San', type:'Holiday', everyYear:false },
+  { id:'event_17',  name:'Holiday', date:'2026/01/31', description:'Me-Dam-Me-Phi', type:'Holiday', everyYear:false },
+
+  { id:'event_21',  name:'Holiday', date:'2026/02/01', description:'Bir Chilaray Divas', type:'Holiday', everyYear:false },
+
+  { id:'event_33',  name:'Holiday', date:'2026/03/03', description:'Dol Jatra', type:'Holiday', everyYear:false },
+  { id:'event_39',  name:'Holiday', date:'2026/03/21', description:'Id-ul-Fitr', type:'Holiday', everyYear:false },
+
+  { id:'event_49',  name:'Holiday', date:'2026/04/03', description:'Good Friday', type:'Holiday', everyYear:false },
+  { id:'event_45',  name:'Holiday', date:'2026/04/14', description:'Bohag Bihu', type:'Holiday', everyYear:false },
+  { id:'event_46',  name:'Holiday', date:'2026/04/15', description:'Bohag Bihu', type:'Holiday', everyYear:false },
+  { id:'event_47',  name:'Holiday', date:'2026/04/16', description:'Bohag Bihu', type:'Holiday', everyYear:false },
+  { id:'event_53',  name:'Holiday', date:'2026/04/21', description:'Sati Sadhani Divas', type:'Holiday', everyYear:false },
+  { id:'event_56',  name:'Holiday', date:'2026/04/18', description:'Tithi of Damodar Dev', type:'Holiday', everyYear:false },
+
+  { id:'event_57',  name:'Holiday', date:'2026/05/01', description:'May Day', type:'Holiday', everyYear:false },
+  { id:'event_62',  name:'Holiday', date:'2026/05/01', description:'Buddha Purnima', type:'Holiday', everyYear:false },
+  { id:'event_71',  name:'Holiday', date:'2026/05/27', description:'Id-ul-Zuha', type:'Holiday', everyYear:false },
+
+  { id:'event_74',  name:'Holiday', date:'2026/06/01', description:'Janmotsav of Sri Sri Madhabdeva', type:'Holiday', everyYear:false },
+
+  { id:'event_93',  name:'Holiday', date:'2026/08/15', description:'Independence Day', type:'Holiday', everyYear:false },
+
+  { id:'event_103', name:'Holiday', date:'2026/09/01', description:'Tirubhav Tithi of Sri Sri Madhabdeva', type:'Holiday', everyYear:false },
+  { id:'event_105', name:'Holiday', date:'2026/09/04', description:'Janmastomi', type:'Holiday', everyYear:false },
+  { id:'event_97',  name:'Holiday', date:'2026/09/12', description:'Tirubhav Tithi of Srimanta Sankardeva', type:'Holiday', everyYear:false },
+  { id:'event_115', name:'Holiday', date:'2026/09/21', description:'Janmotsav of Sri Sri Sankardev', type:'Holiday', everyYear:false },
+  { id:'event_100', name:'Holiday', date:'2026/09/22', description:'Karam Puja', type:'Holiday', everyYear:false },
+
+  { id:'event_116', name:'Holiday', date:'2026/10/02', description:'Birthday of Mahatma Gandhi', type:'Holiday', everyYear:false },
+  { id:'event_111', name:'Holiday', date:'2026/10/18', description:'Durga Puja', type:'Holiday', everyYear:false },
+  { id:'event_112', name:'Holiday', date:'2026/10/19', description:'Durga Puja', type:'Holiday', everyYear:false },
+  { id:'event_113', name:'Holiday', date:'2026/10/20', description:'Durga Puja', type:'Holiday', everyYear:false },
+  { id:'event_114', name:'Holiday', date:'2026/10/21', description:'Vijoya Dasami', type:'Holiday', everyYear:false },
+  { id:'event_121', name:'Holiday', date:'2026/10/18', description:'Kati Bihu', type:'Holiday', everyYear:false },
+
+  { id:'event_123', name:'Holiday', date:'2026/11/08', description:'Kali Puja & Diwali', type:'Holiday', everyYear:false },
+  { id:'event_124', name:'Holiday', date:'2026/11/11', description:'Bhatri Dwitiya', type:'Holiday', everyYear:false },
+  { id:'event_128', name:'Holiday', date:'2026/11/15', description:'Chhat Puja', type:'Holiday', everyYear:false },
+  { id:'event_131', name:'Holiday', date:'2026/11/24', description:"Guru Nanak's Birthday", type:'Holiday', everyYear:false },
+  { id:'event_141', name:'Holiday', date:'2026/11/24', description:'Lachit Divas', type:'Holiday', everyYear:false },
+
+  { id:'event_144', name:'Holiday', date:'2026/12/02', description:'Asom Divas (Su-Ka-Pha Divas)', type:'Holiday', everyYear:false },
+  { id:'event_153', name:'Holiday', date:'2026/12/25', description:'Christmas Day', type:'Holiday', everyYear:false }
+
 
   /* ================= BANK / SPECIAL ================= */
 

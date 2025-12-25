@@ -123,29 +123,41 @@ $(document).ready(function () {
   }
 
   /* ================= KEY DATES ================= */
-  function populateMonthlyEvents(month) {
+function populateMonthlyEvents(month) {
     const list = $('#event-list');
     list.empty();
 
+    const TARGET_YEAR = 2026;
+
     const events = calendarEvents
-      .filter(e => new Date(e.date).getMonth() === month)
-      .sort((a,b) => new Date(a.date) - new Date(b.date));
+        .filter(e => {
+            const d = new Date(e.date);
+            return d.getFullYear() === TARGET_YEAR && d.getMonth() === month;
+        })
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
 
     if (!events.length) {
-      list.append('<li style="color:#fff">No important dates.</li>');
-      return;
+        list.append('<li style="color:#888;">No key dates for this month.</li>');
+        return;
     }
 
     events.forEach(ev => {
-      const d = new Date(ev.date);
-      list.append(`
-        <li>
-          <span style="color:#fff;font-weight:600">${fmt(d)} – </span>
-          <span style="color:${ev.color};font-weight:600">${ev.description}</span>
-        </li>
-      `);
+        const d = new Date(ev.date);
+        const dt =
+            `${String(d.getDate()).padStart(2,'0')}/` +
+            `${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+
+        list.append(`
+            <li>
+                <span style="color:#ffffff;">${dt} – </span>
+                <span style="color:${ev.color};">
+                    ${ev.description}
+                </span>
+            </li>
+        `);
     });
-  }
+}
+
 
   /* ================= TASK PANEL ================= */
   function populateMonthlyTasks(month) {

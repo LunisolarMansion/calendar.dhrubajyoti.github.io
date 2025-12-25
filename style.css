@@ -11,11 +11,16 @@ body {
     padding:30px;
 }
 
+/* ================= SECTION HEADINGS ================= */
+
 .section-title {
-    font-weight:500;
-    color:#fff;
-    margin-bottom:10px;
+    text-align: center;
+    color: #ff69b4;        /* Pink */
+    font-weight: 500;
+    margin-bottom: 12px;
+    letter-spacing: 0.4px;
 }
+
 
 ul {
     list-style:none;

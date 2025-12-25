@@ -33,7 +33,7 @@ h4{color:white;text-align:center}
   border-radius:12px;font-size:12px;font-weight:700;margin-left:8px
 }
 .task-countdown{font-size:12px;font-weight:700;margin-left:8px;color:#ffcc00}
-.task-countdown.overdue{color:#eb8dff}
+.task-countdown.overdue{color:#e774ff}
 
 /* MOBILE */
 @media(max-width:768px){

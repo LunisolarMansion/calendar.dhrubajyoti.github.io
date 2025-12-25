@@ -6,6 +6,8 @@ window.calendarEvents = [
 
 /* ================= RESTRICTED HOLIDAYS (2026) ================= */
 
+{ id: 'RH00', name: "", date: "2026/01/01", description: "<a href='https://www.dhrubajyoti.co.in' target='_blank' style='color: lime;'>Happy New Year_ from Dhrubajyoti</a>", type: "holiday", everyYear: true }
+   
 { id:'RH01', name:'Restricted Holiday', date:'2026/01/01', description:'New Year’s Day', type:'Restricted Holiday', color:'#ffc4c4' },
 { id:'RH02', name:'Restricted Holiday', date:'2026/01/05', description:'Rongker Karkli', type:'Restricted Holiday', color:'#ffc4c4' },
 { id:'RH03', name:'Restricted Holiday', date:'2026/01/13', description:'Uruka of Magh Bihu', type:'Restricted Holiday', color:'#ffc4c4' },
@@ -117,9 +119,8 @@ window.calendarEvents = [
 { id:'SCL01', name:'Special Casual Leave', date:'2026/07/09', description:'Matri Pitri Vandana', type:'Special Casual Leave', color:'#32CD32' },
 { id:'SCL02', name:'Special Casual Leave', date:'2026/07/10', description:'Matri Pitri Vandana', type:'Special Casual Leave', color:'#32CD32' },
 { id:'SCL01', name:'Special Casual Leave', date:'2026/07/23', description:'Matri Pitri Vandana', type:'Special Casual Leave', color:'#32CD32' },
-{ id:'SCL02', name:'Special Casual Leave', date:'2026/07/24', description:'Matri Pitri Vandana', type:'Special Casual Leave', color:'#32CD32' },
+{ id:'SCL02', name:'Special Casual Leave', date:'2026/07/24', description:'Matri Pitri Vandana', type:'Special Casual Leave', color:'#32CD32' }
 
-{ id: 'event_00', name: "", date: "2026/01/01", description: "Happy New Year_ from Dhrubajyoti - Please Visit : <a href='https://lunisolarmansion.github.io/Login/' target='_blank' style='color: lime;'>dhrubajyoti's rural repository</a>", type: "holiday", everyYear: true }
 
 ];
 

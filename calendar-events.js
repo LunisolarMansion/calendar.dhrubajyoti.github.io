@@ -18,7 +18,7 @@ window.calendarEvents = [
     }
   </style>
 
-  <a href="https://sites.google.com/view/elearning-ruralassam"
+  <a href="https://www.dhrubajyoti.co.in"
      target="_blank"
      style="
        font-family:'Sacramento','Brush Script MT','Lucida Handwriting',cursive;

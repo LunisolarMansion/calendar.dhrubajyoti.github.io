@@ -6,7 +6,7 @@ window.calendarEvents = [
 
 /* ================= RESTRICTED HOLIDAYS (2026) ================= */
 
-{ id: 'RH00', name: "", date: "2026/01/01", description: "<a href='https://sites.google.com/view/pnrddhrubajyoti' target='_blank' style='color: lime;'>Happy New Year_ from Dhrubajyoti</a>", type: "holiday", everyYear: true },
+{ id: 'RH00', name: "", date: "2026/01/01", description: "<a href='https://sites.google.com/view/elearning-ruralassam' target='_blank' style='color: lime;'>Happy New Year_ from Dhrubajyoti</a>", type: "holiday", everyYear: true },
    
 { id:'RH01', name:'Restricted Holiday', date:'2026/01/01', description:'New Year’s Day', type:'Restricted Holiday', color:'#ffc4c4' },
 { id:'RH02', name:'Restricted Holiday', date:'2026/01/05', description:'Rongker Karkli', type:'Restricted Holiday', color:'#ffc4c4' },

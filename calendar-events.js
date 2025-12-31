@@ -13,44 +13,50 @@ window.calendarEvents = [
   description: `
   <style>
     @keyframes goldShimmer {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 180% 50%; }
     }
   </style>
 
   <a href="https://sites.google.com/view/elearning-ruralassam"
      target="_blank"
      style="
-       font-family: 'Sacramento','Pacifico','Brush Script MT',cursive;
-       font-size: 24px;
-       font-weight: 500;
-       text-decoration: none;
-       background: linear-gradient(
+       font-family:'Sacramento','Brush Script MT','Lucida Handwriting',cursive;
+       font-size:22px;
+       font-weight:300;
+       text-decoration:none;
+       background:linear-gradient(
          120deg,
-         #b8860b,
-         #ffd700,
-         #fff3b0,
-         #ffd700,
-         #b8860b
+         #9c7a1f,
+         #d4af37,
+         #fff1b8,
+         #d4af37,
+         #9c7a1f
        );
-       background-size: 200% auto;
-       color: transparent;
-       -webkit-background-clip: text;
-       background-clip: text;
-       animation: goldShimmer 3s linear infinite;
-       display: inline-block;
-       letter-spacing: 1px;
+       background-size:180% auto;
+       color:transparent;
+       -webkit-background-clip:text;
+       background-clip:text;
+       animation:goldShimmer 4s linear infinite;
+       letter-spacing:1px;
+       display:inline-block;
      ">
-     Happy New Year <span style="
-       font-family: 'Pacifico','Lucida Handwriting',cursive;
-       font-size: 26px;
-       letter-spacing: 1.5px;
-     ">from Dhrubajyoti</span>
+     Happy New Year
+     <span style="
+       font-family:'Sacramento','Lucida Handwriting',cursive;
+       font-size:24px;
+       font-weight:300;
+       letter-spacing:1.8px;
+       opacity:0.95;
+     ">
+       from Dhrubajyoti
+     </span>
   </a>
   `,
   type: "holiday",
   everyYear: true
 },
+
 
 
    

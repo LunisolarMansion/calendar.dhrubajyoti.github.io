@@ -10,10 +10,48 @@ window.calendarEvents = [
   id: 'RH00',
   name: "",
   date: "2026/01/01",
-  description: "<a href='https://sites.google.com/view/elearning-ruralassam' target='_blank' style=\"color:#ffffff; font-family:'Sacramento','Pacifico','Brush Script MT',cursive; font-size:22px; letter-spacing:1px; text-decoration:none;\">Happy New Year from Dhrubajyoti</a>",
+  description: `
+  <style>
+    @keyframes goldShimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+  </style>
+
+  <a href="https://sites.google.com/view/elearning-ruralassam"
+     target="_blank"
+     style="
+       font-family: 'Sacramento','Pacifico','Brush Script MT',cursive;
+       font-size: 24px;
+       font-weight: 500;
+       text-decoration: none;
+       background: linear-gradient(
+         120deg,
+         #b8860b,
+         #ffd700,
+         #fff3b0,
+         #ffd700,
+         #b8860b
+       );
+       background-size: 200% auto;
+       color: transparent;
+       -webkit-background-clip: text;
+       background-clip: text;
+       animation: goldShimmer 3s linear infinite;
+       display: inline-block;
+       letter-spacing: 1px;
+     ">
+     Happy New Year <span style="
+       font-family: 'Pacifico','Lucida Handwriting',cursive;
+       font-size: 26px;
+       letter-spacing: 1.5px;
+     ">from Dhrubajyoti</span>
+  </a>
+  `,
   type: "holiday",
   everyYear: true
 },
+
 
    
 { id:'RH01', name:'Restricted Holiday', date:'2026/01/01', description:'New Year’s Day', type:'Restricted Holiday', color:'#ffc4c4' },

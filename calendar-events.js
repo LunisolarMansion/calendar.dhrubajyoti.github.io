@@ -44,7 +44,7 @@ window.calendarEvents = [
      Happy New Year <span style="opacity:0.85;">–</span>
      <span style="
        letter-spacing:1.8px;
-       font-size:12px;
+       font-size:18px;
      ">from Dhrubajyoti</span>
   </a>
   `,

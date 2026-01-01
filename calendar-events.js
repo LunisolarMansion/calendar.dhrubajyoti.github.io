@@ -18,7 +18,7 @@ window.calendarEvents = [
     }
   </style>
 
-  <a href="https://sites.google.com/view/elearning-ruralassam"
+  <a href="https://www.dhrubajyoti.co.in"
      target="_blank"
      style="
        font-family:'Sacramento','Brush Script MT','Lucida Handwriting',cursive;
@@ -44,7 +44,7 @@ window.calendarEvents = [
      Happy New Year <span style="opacity:0.85;">–</span>
      <span style="
        letter-spacing:1.8px;
-       font-size:24px;
+       font-size:12px;
      ">from Dhrubajyoti</span>
   </a>
   `,

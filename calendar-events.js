@@ -12,40 +12,71 @@ window.calendarEvents = [
   date: "2026/01/01",
   description: `
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dynalight&display=swap');
+
     @keyframes goldShimmer {
       0%   { background-position: 0% 50%; }
-      100% { background-position: 180% 50%; }
+      100% { background-position: 160% 50%; }
+    }
+
+    /* Signature hover glow – Evo-safe */
+    .rh-signature:hover {
+      text-shadow:
+        0 0 4px rgba(245,245,245,0.55),
+        0 0 8px rgba(245,245,245,0.35);
     }
   </style>
 
-  <a href="https://www.dhrubajyoti.co.in"
-     target="_blank"
+  <span
      style="
        font-family:'Sacramento','Brush Script MT','Lucida Handwriting',cursive;
-       font-size:22px;
+       font-size:30px;
        font-weight:300;
-       text-decoration:none;
        background:linear-gradient(
          120deg,
-         #9c7a1f,
+         #9a7b1f,
          #d4af37,
-         #fff1b8,
+         #f7e7b2,
          #d4af37,
-         #9c7a1f
+         #9a7b1f
        );
-       background-size:180% auto;
+       background-size:160% auto;
        color:transparent;
        -webkit-background-clip:text;
        background-clip:text;
-       animation:goldShimmer 4s linear infinite;
+       animation:goldShimmer 4.5s linear infinite;
        letter-spacing:1px;
        display:inline-block;
      ">
-     Happy New Year <span style="opacity:0.85;">–</span>
-     <span style="
-       letter-spacing:1.8px;
-       font-size:18px;
-     ">from Dhrubajyoti</span>
+     Happy New Year
+  </span>
+
+  <span style="opacity:0.7;">&nbsp;–&nbsp;</span>
+
+  <a href="https://sites.google.com/view/elearning-ruralassam"
+     target="_blank"
+     class="rh-signature"
+     style="
+       font-family:'Dynalight','Brush Script MT','Lucida Handwriting',cursive;
+       font-size:20px;
+       font-weight:300;
+background: linear-gradient(
+  120deg,
+  #9fa4aa,
+  #d1d3d6,
+  #ffffff,
+  #d1d3d6,
+  #9fa4aa
+       );
+       background-size:160% auto;
+       color:transparent;
+       -webkit-background-clip:text;
+       background-clip:text;
+       animation:goldShimmer 4.5s linear infinite;
+       letter-spacing:1.5px;
+       display:inline-block;
+     ">
+     from Dhrubajyoti
   </a>
   `,
   type: "holiday",
